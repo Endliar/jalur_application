@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/counter_bloc.dart';
+import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/views/login/login_page.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),
+        textTheme: const TextTheme(bodyMedium: TextStyle(color: kTextColor)),
         useMaterial3: true,
       ),
       home: BlocProvider(

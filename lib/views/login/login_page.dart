@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:jalur/helpers/colors.dart';
+import 'package:jalur/helpers/size_config.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Добро пожаловать"),
+          backgroundColor: kSecondaryColor,
+          title: const Text(
+            "Добро пожаловать",
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
         ),
         body: Container(
@@ -15,12 +22,43 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                  onPressed: () {}, child: const Text("Зарегистрироваться")),
-              const SizedBox(
-                height: 16,
+              SizedBox(
+                height: getProportionateScreenHeight(35),
+                width: getProportionateScreenWidth(265),
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(kPrimaryColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6)))),
+                  child: const Text(
+                    "Зарегистрироваться",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
-              ElevatedButton(onPressed: () {}, child: const Text("Войти")),
+              SizedBox(
+                height: getProportionateScreenHeight(16),
+              ),
+              SizedBox(
+                  height: getProportionateScreenHeight(35),
+                  width: getProportionateScreenWidth(265),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(kPrimaryColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6)))),
+                    child: const Text(
+                      "Войти",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )),
             ],
           ),
         ));
