@@ -53,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final LoginBloc loginBloc = BlocProvider.of<LoginBloc>(context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kSecondaryColor,
