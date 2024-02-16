@@ -2,7 +2,7 @@
 class LoginUser {
   int id;
   String phone;
-  int code;
+  String code;
   LoginUser({
     required this.id,
     required this.phone,

@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 class Login {
   List<ResponseUser> datatosave = [];
 
-  Future<void> authUser(
-      String phone, int code) async {
+  Future<bool> authUser(
+      String phone, String code) async {
     var url = Uri.parse("http://89.104.69.88/api/user/auth");
     final response = await http.post(url,
         headers: {
@@ -18,8 +18,14 @@ class Login {
           'phone': phone,
           'code': code
         }));
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      if (responseData['data'] != null && responseData['data']['user'] != null) {
+        return true;
+      }
       throw Exception("Не удалось авторизоваться ${response.body}");
+    } else {
+      throw Exception("Не удалось авториз ${response.body}");
     }
   }
 

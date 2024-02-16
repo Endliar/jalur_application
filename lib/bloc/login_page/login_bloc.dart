@@ -28,8 +28,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.smsCode != null && event.smsCode!.isNotEmpty) {
         try {
           emit(LoginLoadingState());
-          await loginRepo.authUser(event.phoneNumber!, int.parse(event.smsCode!));
-          emit(LoginSuccessState());
+          bool isAuth = await loginRepo.authUser(event.phoneNumber!, event.smsCode!);
+          if (isAuth == true) {
+            emit(LoginSuccessState());
+          } else {
+            emit(LoginErrorState("Введен неверный код"));
+          }
         } on Exception catch (e) {
           emit(LoginErrorState(e.toString()));
         }
