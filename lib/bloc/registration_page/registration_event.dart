@@ -5,6 +5,7 @@ class RegistrationSubmitted extends RegistrationEvent {
   final String surname;
   final String phone;
   final String gender;
+  final String role;
   final int age;
 
   RegistrationSubmitted(
@@ -12,7 +13,8 @@ class RegistrationSubmitted extends RegistrationEvent {
       required this.surname,
       required this.phone,
       required this.age,
-      required this.gender});
+      required this.gender,
+      required this.role});
 }
 
 abstract class RegistrationState {}

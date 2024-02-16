@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
+import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/response_api/create_user.dart';
 import 'package:jalur/views/login/login_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
@@ -19,7 +20,7 @@ class Routes {
       case login:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                create: (context) => LoginBloc(), child: const LoginPage()));
+                create: (context) => LoginBloc(loginRepo: Login()), child: const LoginPage()));
       case regin:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(

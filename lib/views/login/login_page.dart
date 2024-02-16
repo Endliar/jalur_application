@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
+import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
 import 'package:jalur/helpers/size_config.dart';
+import 'package:jalur/response_api/auth_user.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../helpers/colors.dart';
@@ -41,15 +43,33 @@ class _LoginPageState extends State<LoginPage> {
 
   void _onPhoneTextChanged() {}
 
-  void _sendVerificationCode() {
+  void _sendVerificationCode() async {
+    final phoneNumber = _phoneController.text;
     if (_phoneInputFormatter.isFill()) {
-      setState(() {
-        _sendCode = true;
-      });
+      try {
+        context.read<LoginBloc>().add(SendVerificationCodeEvent(phoneNumber));
+        final requestCodeSuccess = await context.read<Login>().requestCode(phoneNumber);
+        if (requestCodeSuccess) {
+          setState(() {
+            _sendCode = true;
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Ошибка отправки кода верификации")),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка: $e")));
+      }
     }
   }
 
-  void _login() {}
+  void _login() async {
+    final smsCode = _smsCodeController.text;
+    if (smsCode.isNotEmpty) {
+      context.read<LoginBloc>().add(LoginWithCodeEvent(_phoneController.text, smsCode));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +87,10 @@ class _LoginPageState extends State<LoginPage> {
             if (state is LoginErrorState) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));
-            } else if (state is LoginSuccessState) {}
+            } else if (state is LoginSuccessState) {
+              ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("Красава")));
+            }
           },
           child: BlocBuilder<LoginBloc, LoginState>(
             builder: (context, state) {

@@ -7,7 +7,7 @@ class User {
   List<ResponseUser> datatosave = [];
 
   Future<void> createUser(
-      String name, String surname, String phone, String gender, int age) async {
+      String name, String surname, String phone, String gender, String role, int age) async {
     var url = Uri.parse("http://89.104.69.88/api/user/create");
     final response = await http.post(url,
         headers: {
@@ -19,6 +19,7 @@ class User {
           'last_name': surname,
           'phone': phone,
           'gender': gender,
+          'role': role,
           'age': age
         }));
     if (response.statusCode != 201) {

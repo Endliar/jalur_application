@@ -15,7 +15,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     try {
       emit(RegistrationLoading());
       await user.createUser(
-          event.name, event.surname, event.phone, event.gender, event.age);
+          event.name, event.surname, event.phone, event.gender, event.role, event.age);
       emit(RegistrationSuccess());
     } catch (e) {
       emit(RegistrationFailure(error: e.toString()));

@@ -6,6 +6,7 @@ class SendVerificationCodeEvent extends LoginEvent {
 }
 
 class LoginWithCodeEvent extends LoginEvent {
+  final String? phoneNumber;
   final String? smsCode;
-  LoginWithCodeEvent(this.smsCode);
+  LoginWithCodeEvent(this.phoneNumber, this.smsCode);
 }

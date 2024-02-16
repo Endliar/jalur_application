@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_event.dart';
 import 'package:jalur/helpers/size_config.dart';
+import 'package:jalur/views/registration/components/gender_text_field.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../helpers/colors.dart';
@@ -107,8 +108,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         height: getProportionateScreenHeight(10.0),
                       ),
                       headerText("Укажите ваш пол"),
-                      defaultTextField("Ваш гендер?", _genderController),
-                      headerText("Укажите пол"),
+                      genderTextField(context: context, controller: _genderController),
                       SizedBox(
                         height: getProportionateScreenHeight(10.0),
                       ),
@@ -128,6 +128,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           surname: _surnameController.text,
                                           phone: _phoneController.text,
                                           gender: _genderController.text,
+                                          role: 'Клиент',
                                           age: int.tryParse(
                                                   _ageController.text) ??
                                               0));

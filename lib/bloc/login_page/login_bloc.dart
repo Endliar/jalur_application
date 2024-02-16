@@ -2,18 +2,37 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
 
+import '../../response_api/auth_user.dart';
+
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(InitialState()) {
+  final Login loginRepo;
+  LoginBloc({required this.loginRepo}) : super(InitialState()) {
     on<SendVerificationCodeEvent>((event, emit) async {
       if (event.phoneNumber != null && event.phoneNumber!.isNotEmpty) {
-        emit(CodeSentState());
+        try {
+          emit(LoginLoadingState());
+          bool requestCodeSent = await loginRepo.requestCode(event.phoneNumber!);
+          if (requestCodeSent) {
+            emit(CodeSentState());
+          } else {
+            emit(LoginErrorState("Не удалось отправить код верификации"));
+          }
+        } catch (e) {
+          emit(LoginErrorState(e.toString()));
+        }
       } else {
         emit(LoginErrorState("Не указан номер телефона"));
       }
     });
     on<LoginWithCodeEvent>((event, emit) async {
       if (event.smsCode != null && event.smsCode!.isNotEmpty) {
-        emit(LoginSuccessState());
+        try {
+          emit(LoginLoadingState());
+          await loginRepo.authUser(event.phoneNumber!, int.parse(event.smsCode!));
+          emit(LoginSuccessState());
+        } on Exception catch (e) {
+          emit(LoginErrorState(e.toString()));
+        }
       } else {
         emit(LoginErrorState("Не указан SMS код"));
       }
