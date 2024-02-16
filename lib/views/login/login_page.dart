@@ -5,6 +5,8 @@ import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/views/login/components/phone_number_input.dart';
+import 'package:jalur/views/login/components/verification_code_input.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../helpers/colors.dart';
@@ -99,22 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    TextField(
-                      controller: _phoneController,
-                      inputFormatters: [_phoneInputFormatter],
-                      decoration: const InputDecoration(
-                          hintText: "Введите номер телефона"),
-                      keyboardType: TextInputType.phone,
-                    ),
+                    PhoneNumberInput(controller: _phoneController, formatter: _phoneInputFormatter),
                     SizedBox(
                       height: getProportionateScreenHeight(16.0),
                     ),
                     _sendCode
-                        ? TextField(
-                            controller: _smsCodeController,
-                            decoration:
-                                const InputDecoration(hintText: "Введите код"),
-                          )
+                        ? VerificationCodeInput(controller: _smsCodeController)
                         : SizedBox(
                             height: getProportionateScreenHeight(16.0),
                           ),
