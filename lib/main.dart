@@ -4,23 +4,28 @@ import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  final SharedPreferences preferences = await SharedPreferences.getInstance();
+  final String? authToken = preferences.getString('auth_token');
   runApp(
     RepositoryProvider(
       create: (context) => Login(),
       child: BlocProvider(
         create: (context) => LoginBloc(loginRepo: RepositoryProvider.of<Login>(context)),
-        child: MyApp(),
+        child: MyApp(isUserLoggedIn: authToken != null),
         ),
       ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  final bool isUserLoggedIn;
   final loginRepo = Login();
-  MyApp({super.key});
+  MyApp({super.key, required this.isUserLoggedIn});
 
   // This widget is the root of your application.
   @override
@@ -36,7 +41,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => LoginBloc(loginRepo: loginRepo),
-        child: const WelcomePage(),
+        child: isUserLoggedIn ? const Homepage() : const WelcomePage(),
       ),
     );
   }

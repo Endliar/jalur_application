@@ -2,11 +2,17 @@ import 'dart:convert';
 
 import 'package:jalur/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login {
   List<ResponseUser> datatosave = [];
 
-  Future<bool> authUser(
+  Future<void> _saveToken(String token) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString('auth_token', token);
+  }
+
+  Future<bool> authUser (
       String phone, String code) async {
     var url = Uri.parse("http://89.104.69.88/api/user/auth");
     final response = await http.post(url,
@@ -21,6 +27,7 @@ class Login {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['data'] != null && responseData['data']['user'] != null) {
+        await _saveToken(responseData['data']['access_key']);
         return true;
       }
       throw Exception("Не удалось авторизоваться ${response.body}");
