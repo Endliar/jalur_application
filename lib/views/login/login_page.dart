@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
+import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/views/login/components/phone_number_input.dart';
@@ -90,8 +91,7 @@ class _LoginPageState extends State<LoginPage> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));
             } else if (state is LoginSuccessState) {
-              ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("Красава")));
+              Navigator.pushNamed(context, Routes.homepage);
             }
           },
           child: BlocBuilder<LoginBloc, LoginState>(

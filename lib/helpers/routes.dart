@@ -4,6 +4,7 @@ import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/response_api/create_user.dart';
+import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/login/login_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
@@ -12,6 +13,7 @@ class Routes {
   static const String home = '/home';
   static const String login = '/login';
   static const String regin = '/regin';
+  static const String homepage = '/homepage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -20,13 +22,16 @@ class Routes {
       case login:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                create: (context) => LoginBloc(loginRepo: Login()), child: const LoginPage()));
+                create: (context) => LoginBloc(loginRepo: Login()), 
+                child: const LoginPage()));
       case regin:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
                   create: (context) => RegistrationBloc(user: User()),
-                  child: RegistrationPage(),
+                  child: const RegistrationPage(),
                 ));
+      case homepage:
+        return MaterialPageRoute(builder: (_) => const Homepage());
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(
