@@ -3,9 +3,5 @@ class LoginUser {
   int id;
   String phone;
   String code;
-  LoginUser({
-    required this.id,
-    required this.phone,
-    required this.code
-  });
+  LoginUser({required this.id, required this.phone, required this.code});
 }

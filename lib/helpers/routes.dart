@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/response_api/create_user.dart';
+import 'package:jalur/response_api/get_workout.dart';
 import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/login/login_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
@@ -22,7 +24,7 @@ class Routes {
       case login:
         return MaterialPageRoute(
             builder: (context) => BlocProvider(
-                create: (context) => LoginBloc(loginRepo: Login()), 
+                create: (context) => LoginBloc(loginRepo: Login()),
                 child: const LoginPage()));
       case regin:
         return MaterialPageRoute(
@@ -31,7 +33,12 @@ class Routes {
                   child: const RegistrationPage(),
                 ));
       case homepage:
-        return MaterialPageRoute(builder: (_) => const Homepage());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider<HomepageBloc>(
+                  create: (context) => HomepageBloc(
+                      apiServiceGetWorkout: ApiServiceGetWorkout()),
+                  child: const Homepage(),
+                ));
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

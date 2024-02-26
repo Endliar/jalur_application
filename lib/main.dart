@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/response_api/get_workout.dart';
 import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,10 +17,11 @@ void main() async {
     RepositoryProvider(
       create: (context) => Login(),
       child: BlocProvider(
-        create: (context) => LoginBloc(loginRepo: RepositoryProvider.of<Login>(context)),
+        create: (context) =>
+            LoginBloc(loginRepo: RepositoryProvider.of<Login>(context)),
         child: MyApp(isUserLoggedIn: authToken != null),
-        ),
       ),
+    ),
   );
 }
 
@@ -41,7 +44,12 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => LoginBloc(loginRepo: loginRepo),
-        child: isUserLoggedIn ? const Homepage() : const WelcomePage(),
+        child: isUserLoggedIn
+            ? BlocProvider<HomepageBloc>(
+                create: (context) =>
+                    HomepageBloc(apiServiceGetWorkout: ApiServiceGetWorkout()),
+                child: const Homepage())
+            : const WelcomePage(),
       ),
     );
   }
