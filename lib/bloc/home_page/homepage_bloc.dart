@@ -5,20 +5,18 @@ import 'package:jalur/response_api/get_workout.dart';
 
 class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   final ApiServiceGetWorkout apiServiceGetWorkout;
+  HomepageBloc(this.apiServiceGetWorkout) : super(InitialState()) {
+    on<LoadWorkoutEvent>(_onLoadWorkoutEvent);
+  }
 
-  HomepageBloc({required this.apiServiceGetWorkout}) : super(InitialState()) {
-    on<LoadUserEvent>(((event, emit) async {
-      emit(HomepageLoadingState());
-      try {
-        final workouts = await apiServiceGetWorkout.getWorkouts();
-        if (workouts.isNotEmpty) {
-          emit(HomepageChoiceWorkoutSuccess(workouts));
-        } else {
-          emit(HomepageErrorState("Не удалось загрузить список тренировок"));
-        }
-      } catch (e) {
-        emit(HomepageErrorState("Ошибка загрузки данных: ${e.toString()}"));
-      }
-    }));
+  Future<void> _onLoadWorkoutEvent(
+      LoadWorkoutEvent event, Emitter<HomepageState> emit) async {
+    try {
+      emit(LoadingState());
+      final workouts = await apiServiceGetWorkout.getWorkouts();
+      emit(HomepageLoadWorkoutSuccess(workouts));
+    } catch (e) {
+      emit(HomepageErrorState(e.toString()));
+    }
   }
 }
