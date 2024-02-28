@@ -4,6 +4,7 @@ class Workout {
   int id;
   int typeWorkoutId;
   String name;
+  String typeName;
   String description;
   List<String> images;
   String createdAt;
@@ -12,6 +13,7 @@ class Workout {
       {required this.id,
       required this.typeWorkoutId,
       required this.name,
+      this.typeName = '',
       required this.description,
       required this.images,
       required this.createdAt,

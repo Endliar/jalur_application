@@ -8,6 +8,7 @@ import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout.dart';
 import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/login/components/phone_number_input.dart';
@@ -101,8 +102,9 @@ class _LoginPageState extends State<LoginPage> {
             } else if (state is LoginSuccessState) {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => BlocProvider<HomepageBloc>(
-                  create: (context) => HomepageBloc(ApiServiceGetWorkout())
-                    ..add(LoadWorkoutEvent()),
+                  create: (context) =>
+                      HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                        ..add(LoadWorkoutEvent()),
                   child: BlocBuilder<HomepageBloc, HomepageState>(
                     builder: (context, state) {
                       if (state is LoadingState) {

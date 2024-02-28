@@ -12,7 +12,6 @@ class Routes {
   static const String home = '/home';
   static const String login = '/login';
   static const String regin = '/regin';
-  static const String homepage = '/homepage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {

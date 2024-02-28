@@ -6,6 +6,7 @@ import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout.dart';
 import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
@@ -49,8 +50,9 @@ class MyApp extends StatelessWidget {
         create: (context) => LoginBloc(loginRepo: loginRepo),
         child: isUserLoggedIn
             ? BlocProvider<HomepageBloc>(
-                create: (context) => HomepageBloc(ApiServiceGetWorkout())
-                  ..add(LoadWorkoutEvent()),
+                create: (context) =>
+                    HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                      ..add(LoadWorkoutEvent()),
                 child: BlocBuilder<HomepageBloc, HomepageState>(
                   builder: (context, state) {
                     if (state is LoadingState) {
