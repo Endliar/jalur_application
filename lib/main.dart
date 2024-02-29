@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'bloc/home_page/homepage_event.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   final String? authToken = preferences.getString('auth_token');
   runApp(

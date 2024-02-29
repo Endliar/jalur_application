@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_bloc.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_event.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_bloc.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
 import 'package:jalur/helpers/colors.dart';
+import 'package:jalur/response_api/get_coach_data.dart';
 import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout_detail.dart';
+import 'package:jalur/views/coach_info_page/coach_info_page.dart';
 import 'package:jalur/views/workout_page/workout_page.dart';
 
 import '../../models/workout.dart';
@@ -27,12 +32,50 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       _selectedIndex = index;
     });
+
+    switch (index) {
+      case 0:
+        // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
+        break;
+      case 1:
+        break;
+      case 2:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BlocProvider<CoachDataBloc>(
+            create: (context) =>
+                CoachDataBloc((GetCoachData()))..add(LoadCoachDataEvent()),
+            child: BlocBuilder<CoachDataBloc, CoachDataState>(
+              builder: (context, state) {
+                if (state is LoadingCoachDataState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is LoadCoachDataSuccess) {
+                  return CoachInfoPage(
+                    coaches: state.coaches,
+                  );
+                } else if (state is CoachErrorState) {
+                  return Center(child: Text('Error: ${state.error}'));
+                }
+                return const Center(
+                  child: Text('Данные не загружены'),
+                );
+              },
+            ),
+          ),
+        ));
+        break;
+      case 3:
+        break;
+      default:
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kSecondaryColor,
         title: const Text(
           "Главная",
