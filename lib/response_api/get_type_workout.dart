@@ -7,8 +7,7 @@ class GetTypeWorkout {
   Future<WorkoutType> getType(int typeId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    var url =
-        Uri.parse("http://89.104.69.88/api/hall/workout/type/show/$typeId");
+    var url = Uri.parse("http://89.104.69.88/api/workout/type/show/$typeId");
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });
