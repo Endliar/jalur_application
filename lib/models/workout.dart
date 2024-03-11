@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Workout {
   int id;
   int typeWorkoutId;

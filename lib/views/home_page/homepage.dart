@@ -8,14 +8,19 @@ import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/response_api/get_coach_data.dart';
+import 'package:jalur/response_api/get_schedule.dart';
 import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout_detail.dart';
 import 'package:jalur/views/coach_info_page/coach_info_page.dart';
 import 'package:jalur/views/workout_page/workout_page.dart';
 
 import '../../models/workout.dart';
+import '../schedule_info_page/shedule_info_page.dart';
 
 class Homepage extends StatefulWidget {
   final List<Workout> workouts;
@@ -38,6 +43,33 @@ class _HomepageState extends State<Homepage> {
         // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
         break;
       case 1:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BlocProvider<ScheduleDataBloc>(
+            create: (context) => ScheduleDataBloc(ApiServiceGetSchedule(),
+                ApiServiceGetWorkoutDetail(), GetTypeWorkout())
+              ..add(LoadScheduleDataEvent()),
+            child: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
+              builder: (context, state) {
+                if (state is LoadingScheduleDataState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is LoadScheduleDataSuccess) {
+                  return SheduleInfoPage(
+                    schedules: state.schedules,
+                  );
+                } else if (state is ScheduleErrorState) {
+                  return Center(
+                    child: Text('Ошибка: ${state.error}'),
+                  );
+                }
+                return const Center(
+                  child: Text('Данные о расписании не загружены'),
+                );
+              },
+            ),
+          ),
+        ));
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
