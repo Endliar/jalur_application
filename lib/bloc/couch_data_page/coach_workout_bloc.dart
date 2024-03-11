@@ -9,6 +9,7 @@ class CoachDataBloc extends Bloc<CoachDataEvent, CoachDataState> {
   final GetCoachData getCoachData;
   CoachDataBloc(this.getCoachData) : super(InitialState()) {
     on<LoadCoachDataEvent>(_onLoadCoachDataEvent);
+    on<CoachDetailButtonPressed>(_onCoachDetailButtonPressed);
   }
 
   Future<void> _onLoadCoachDataEvent(
@@ -17,6 +18,17 @@ class CoachDataBloc extends Bloc<CoachDataEvent, CoachDataState> {
       emit(LoadingCoachDataState());
       List<Coach> coaches = await getCoachData.getCoachesData();
       emit(LoadCoachDataSuccess(coaches));
+    } catch (e) {
+      emit(CoachErrorState(e.toString()));
+    }
+  }
+
+  Future<void> _onCoachDetailButtonPressed(
+      CoachDetailButtonPressed event, Emitter<CoachDataState> emit) async {
+    try {
+      emit(LoadingCoachDataState());
+      final Coach coach = await getCoachData.getUserData(event.coachId);
+      emit(LoadCoachDataSuccess([coach]));
     } catch (e) {
       emit(CoachErrorState(e.toString()));
     }

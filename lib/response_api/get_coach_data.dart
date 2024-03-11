@@ -22,4 +22,20 @@ class GetCoachData {
       throw Exception("Ошибка запроса: Статус код ${response.statusCode}");
     }
   }
+
+  Future<Coach> getUserData(int id) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final String? authToken = preferences.getString('auth_token');
+    var url = Uri.parse('http://89.104.69.88/api/user/show/$id');
+    final response = await http.get(url, headers: {
+      'Authorization': 'Bearer $authToken',
+    });
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+      return Coach.fromJson(responseData);
+    } else {
+      throw Exception("Ошибка запроса: Статус код ${response.statusCode}");
+    }
+  }
 }
