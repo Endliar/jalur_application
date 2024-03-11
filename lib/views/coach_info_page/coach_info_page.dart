@@ -23,7 +23,7 @@ class CoachInfoPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 14.0, vertical: 16.0),
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
               child: Container(
                 decoration: BoxDecoration(
                     color: const Color(0xFFD9D9D9),

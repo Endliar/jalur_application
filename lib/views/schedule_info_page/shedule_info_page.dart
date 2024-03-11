@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jalur/models/schedule.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../helpers/colors.dart';
 
@@ -23,20 +24,32 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: widget.schedules.length,
-        itemBuilder: (context, index) {
-          final schedule = widget.schedules[index];
-          return Card(
-            margin: const EdgeInsets.all(8.0),
-            child: ListTile(
-              title: Text(schedule.workoutName),
-              subtitle: Text(schedule.typeName),
-              trailing: ElevatedButton(
-                  onPressed: () {}, child: const Text('Записаться')),
+      body: Column(
+        children: [
+          TableCalendar(
+            focusedDay: DateTime.now(),
+            firstDay: DateTime.utc(2010, 10, 16),
+            lastDay: DateTime.utc(2030, 3, 14),
+            calendarFormat: CalendarFormat.month,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.schedules.length,
+              itemBuilder: (context, index) {
+                final schedule = widget.schedules[index];
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text(schedule.workoutName),
+                    subtitle: Text(schedule.typeName),
+                    trailing: ElevatedButton(
+                        onPressed: () {}, child: const Text('Записаться')),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
