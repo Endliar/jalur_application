@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_bloc.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_event.dart';
+import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
 import 'package:jalur/models/coach.dart';
+import 'package:jalur/response_api/get_coach_data.dart';
+import 'package:jalur/views/coach_info_page/coach_detail_page.dart';
 
 import '../../helpers/colors.dart';
 
@@ -50,22 +56,54 @@ class CoachInfoPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          '${coaches[index].firstName} ${coaches[index].lastName}',
+                          '${coaches[index].firstName} ${coaches[index].id}',
                           style: const TextStyle(
                               fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: ElevatedButton(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: ElevatedButton(
                               style: TextButton.styleFrom(
                                   foregroundColor: Colors.white,
                                   backgroundColor: kPrimaryColor,
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(6.0))),
-                              onPressed: () {},
-                              child: const Text('Подробнее')),
-                        ),
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      BlocProvider<CoachDataBloc>(
+                                    create: (context) =>
+                                        CoachDataBloc((GetCoachData()))
+                                          ..add(CoachDetailButtonPressed(
+                                              coachId: coaches[index].id)),
+                                    child: BlocBuilder<CoachDataBloc,
+                                        CoachDataState>(
+                                      builder: (context, state) {
+                                        if (state is LoadingCoachDataState) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (state
+                                            is LoadCoachDataSuccess) {
+                                          return CoachDetailPage(
+                                            coach: state.coaches.first,
+                                          );
+                                        } else if (state is CoachErrorState) {
+                                          return Center(
+                                              child: Text(
+                                                  'Error: ${state.error}'));
+                                        }
+                                        return const Center(
+                                          child: Text('Данные не загружены'),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ));
+                              },
+                              child: const Text('Подробнее'),
+                            ))
                       ],
                     ))
                   ],

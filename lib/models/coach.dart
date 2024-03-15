@@ -3,7 +3,8 @@ class Coach {
   final String firstName;
   final String lastName;
   final String? middleName;
-  final int age;
+  final int? age;
+  final String description;
   final String role;
   final String gender;
   final String? image;
@@ -16,6 +17,7 @@ class Coach {
     required this.lastName,
     required this.middleName,
     required this.age,
+    required this.description,
     required this.role,
     required this.gender,
     required this.image,
@@ -30,6 +32,7 @@ class Coach {
       lastName: json['last_name'],
       middleName: json['middle_name'],
       age: json['age'] ?? 0,
+      description: json['description'],
       role: json['role'],
       gender: json['gender'],
       image: json['image'],

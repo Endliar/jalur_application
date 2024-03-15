@@ -32,7 +32,7 @@ class GetCoachData {
     });
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> responseData = json.decode(response.body);
+      Map<String, dynamic> responseData = json.decode(response.body)['data'];
       return Coach.fromJson(responseData);
     } else {
       throw Exception("Ошибка запроса: Статус код ${response.statusCode}");
