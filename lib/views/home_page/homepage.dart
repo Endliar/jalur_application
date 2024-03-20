@@ -1,26 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jalur/bloc/couch_data_page/coach_workout_bloc.dart';
-import 'package:jalur/bloc/couch_data_page/coach_workout_event.dart';
-import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
-import 'package:jalur/bloc/detail_workout_page/detail_workout_bloc.dart';
-import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
-import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
-import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
-import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
-import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/helpers/colors.dart';
-import 'package:jalur/response_api/get_coach_data.dart';
-import 'package:jalur/response_api/get_schedule.dart';
-import 'package:jalur/response_api/get_type_workout.dart';
-import 'package:jalur/response_api/get_workout_detail.dart';
-import 'package:jalur/views/coach_info_page/coach_info_page.dart';
-import 'package:jalur/views/workout_page/workout_page.dart';
+import 'package:jalur/helpers/routes.dart';
 
 import '../../models/workout.dart';
-import '../schedule_info_page/shedule_info_page.dart';
 
 class Homepage extends StatefulWidget {
   final List<Workout> workouts;
@@ -43,59 +28,12 @@ class _HomepageState extends State<Homepage> {
         // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BlocProvider<ScheduleDataBloc>(
-            create: (context) => ScheduleDataBloc(ApiServiceGetSchedule(),
-                ApiServiceGetWorkoutDetail(), GetTypeWorkout())
-              ..add(LoadScheduleDataEvent()),
-            child: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
-              builder: (context, state) {
-                if (state is LoadingScheduleDataState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is LoadScheduleDataSuccess) {
-                  return SheduleInfoPage(
-                    schedules: state.schedules,
-                  );
-                } else if (state is ScheduleErrorState) {
-                  return Center(
-                    child: Text('Ошибка: ${state.error}'),
-                  );
-                }
-                return const Center(
-                  child: Text('Данные о расписании не загружены'),
-                );
-              },
-            ),
-          ),
-        ));
+        Navigator.of(context)
+            .pushNamed(Routes.schedule, arguments: _selectedIndex);
         break;
       case 2:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BlocProvider<CoachDataBloc>(
-            create: (context) =>
-                CoachDataBloc((GetCoachData()))..add(LoadCoachDataEvent()),
-            child: BlocBuilder<CoachDataBloc, CoachDataState>(
-              builder: (context, state) {
-                if (state is LoadingCoachDataState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is LoadCoachDataSuccess) {
-                  return CoachInfoPage(
-                    coaches: state.coaches,
-                  );
-                } else if (state is CoachErrorState) {
-                  return Center(child: Text('Error: ${state.error}'));
-                }
-                return const Center(
-                  child: Text('Данные не загружены'),
-                );
-              },
-            ),
-          ),
-        ));
+        Navigator.of(context)
+            .pushNamed(Routes.coach, arguments: _selectedIndex);
         break;
       case 3:
         break;
@@ -180,38 +118,9 @@ class _HomepageState extends State<Homepage> {
                           alignment: Alignment.bottomRight,
                           child: ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      BlocProvider<DetailWorkoutBloc>(
-                                    create: (context) => DetailWorkoutBloc(
-                                        ApiServiceGetWorkoutDetail(),
-                                        GetTypeWorkout())
-                                      ..add(LoadWorkoutEvent(
-                                          state.workouts[index].id)),
-                                    child: BlocBuilder<DetailWorkoutBloc,
-                                        DetailWorkoutState>(
-                                      builder: (context, state) {
-                                        if (state is LoadingDetailState) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else if (state
-                                            is LoadWorkoutSuccess) {
-                                          final workout = state.workouts;
-                                          return WorkoutPage(data: workout);
-                                        } else if (state is WorkoutErrorState) {
-                                          return Center(
-                                            child:
-                                                Text('Ошибка: ${state.error}'),
-                                          );
-                                        }
-                                        return const Center(
-                                          child: Text('Данные не загружены'),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ));
+                                Navigator.of(context).pushNamed(
+                                    Routes.detailWorkout,
+                                    arguments: state.workouts[index].id);
                               },
                               child: const Text('Подробнее')),
                         ),
@@ -226,7 +135,7 @@ class _HomepageState extends State<Homepage> {
           return Center(child: Text('Error: ${state.error}'));
         } else {
           return const Center(
-            child: Text('Нет данных'),
+            child: Text('Нет данных о тренировках'),
           );
         }
       }),

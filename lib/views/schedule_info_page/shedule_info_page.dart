@@ -3,17 +3,51 @@ import 'package:jalur/models/schedule.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../helpers/colors.dart';
+import '../../helpers/routes.dart';
 
 class SheduleInfoPage extends StatefulWidget {
   final List<Schedule> schedules;
-  const SheduleInfoPage({super.key, required this.schedules});
+  final int selectedIndex;
+  const SheduleInfoPage(
+      {super.key, required this.schedules, required this.selectedIndex});
 
   @override
   State<SheduleInfoPage> createState() => _SheduleInfoPageState();
 }
 
 class _SheduleInfoPageState extends State<SheduleInfoPage> {
+  int _selectedIndex = 0;
+
   @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex;
+  }
+
+  void _onItemTapped(int index) {
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+
+      switch (index) {
+        case 0:
+          // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
+          break;
+        case 1:
+          Navigator.of(context).pushNamed(Routes.schedule);
+          break;
+        case 2:
+          Navigator.of(context)
+              .pushNamed(Routes.coach, arguments: _selectedIndex);
+          break;
+        case 3:
+          break;
+        default:
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,6 +84,21 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.schedule), label: 'Расписание'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.fitness_center), label: 'Тренера'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle_outlined), label: 'Профиль'),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }
