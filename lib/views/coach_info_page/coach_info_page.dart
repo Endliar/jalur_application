@@ -37,8 +37,7 @@ class _CoachInfoPageState extends State<CoachInfoPage> {
 
       switch (index) {
         case 0:
-          // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
-          break;
+          Navigator.of(context).pushNamed(Routes.homepage);
         case 1:
           Navigator.of(context)
               .pushNamed(Routes.schedule, arguments: _selectedIndex);

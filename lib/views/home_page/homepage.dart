@@ -4,6 +4,7 @@ import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
 import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/helpers/routes.dart';
+import 'package:jalur/views/profile_info_page/profile_page.dart';
 
 import '../../models/workout.dart';
 
@@ -25,7 +26,6 @@ class _HomepageState extends State<Homepage> {
 
     switch (index) {
       case 0:
-        // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
         break;
       case 1:
         Navigator.of(context)
@@ -36,7 +36,8 @@ class _HomepageState extends State<Homepage> {
             .pushNamed(Routes.coach, arguments: _selectedIndex);
         break;
       case 3:
-        break;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()));
       default:
     }
   }

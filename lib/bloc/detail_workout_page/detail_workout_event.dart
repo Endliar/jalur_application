@@ -1,7 +1,7 @@
 abstract class DetailWorkoutEvent {}
 
-class LoadWorkoutEvent extends DetailWorkoutEvent {
+class LoadDetailWorkoutEvent extends DetailWorkoutEvent {
   final int id;
 
-  LoadWorkoutEvent(this.id);
+  LoadDetailWorkoutEvent(this.id);
 }

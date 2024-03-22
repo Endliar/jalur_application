@@ -10,11 +10,11 @@ class DetailWorkoutBloc extends Bloc<DetailWorkoutEvent, DetailWorkoutState> {
   final GetTypeWorkout getTypeWorkout;
   DetailWorkoutBloc(this.apiServiceGetWorkoutDetail, this.getTypeWorkout)
       : super(InitialState()) {
-    on<LoadWorkoutEvent>(_onLoadCurrentWorkoutEvent);
+    on<LoadDetailWorkoutEvent>(_onLoadCurrentWorkoutEvent);
   }
 
   Future<void> _onLoadCurrentWorkoutEvent(
-      LoadWorkoutEvent event, Emitter<DetailWorkoutState> emit) async {
+      LoadDetailWorkoutEvent event, Emitter<DetailWorkoutState> emit) async {
     try {
       emit(LoadingDetailState());
       final workout = await apiServiceGetWorkoutDetail.getWorkoutById(event.id);

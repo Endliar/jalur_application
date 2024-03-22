@@ -6,6 +6,7 @@ import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_bloc.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
+import 'package:jalur/bloc/home_page/homepage_event.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
@@ -22,7 +23,12 @@ import 'package:jalur/views/login/login_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
 import 'package:jalur/views/schedule_info_page/shedule_info_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
-import 'package:jalur/views/workout_page/workout_page.dart';
+
+import '../bloc/home_page/homepage_bloc.dart';
+import '../bloc/home_page/homepage_state.dart';
+import '../response_api/get_workout.dart';
+import '../views/home_page/homepage.dart';
+import '../views/workout_page/workout_page.dart';
 
 class Routes {
   static const String home = '/home';
@@ -31,6 +37,7 @@ class Routes {
   static const String schedule = '/schedule';
   static const String coach = '/coach';
   static const String detailWorkout = '/detailWorkout';
+  static const String homepage = '/homepage';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -47,6 +54,29 @@ class Routes {
                   create: (context) => RegistrationBloc(user: User()),
                   child: const RegistrationPage(),
                 ));
+      case homepage:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<HomepageBloc>(
+              create: (context) =>
+                  HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                    ..add(LoadWorkoutEvent()),
+              child: BlocBuilder<HomepageBloc, HomepageState>(
+                builder: (context, state) {
+                  if (state is LoadingState) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (state is HomepageLoadWorkoutSuccess) {
+                    return Homepage(workouts: state.workouts);
+                  } else if (state is HomepageErrorState) {
+                    return Center(child: Text('Error: ${state.error}'));
+                  }
+                  return const Center(
+                    child: Text('Данные не загружены'),
+                  );
+                },
+              )),
+        );
       case schedule:
         final int pageIndex = settings.arguments as int;
         return MaterialPageRoute(
@@ -110,7 +140,7 @@ class Routes {
           builder: (context) => BlocProvider<DetailWorkoutBloc>(
             create: (context) => DetailWorkoutBloc(
                 ApiServiceGetWorkoutDetail(), GetTypeWorkout())
-              ..add(LoadWorkoutEvent(workoutId)),
+              ..add(LoadDetailWorkoutEvent(workoutId)),
             child: BlocBuilder<DetailWorkoutBloc, DetailWorkoutState>(
               builder: (context, state) {
                 if (state is LoadingDetailState) {

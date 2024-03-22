@@ -32,8 +32,7 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
 
       switch (index) {
         case 0:
-          // здесь должен быть код для навигации на главную страницу, если этот индекс уже не активен
-          break;
+          Navigator.of(context).pushNamed(Routes.homepage);
         case 1:
           Navigator.of(context).pushNamed(Routes.schedule);
           break;
@@ -51,6 +50,7 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kSecondaryColor,
         title: const Text(
           "Расписание",
