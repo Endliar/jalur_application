@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/couch_data_page/coach_workout_bloc.dart';
-import 'package:jalur/bloc/couch_data_page/coach_workout_event.dart';
 import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_bloc.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
 import 'package:jalur/bloc/home_page/homepage_event.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
+import 'package:jalur/bloc/profile_data_page/profile_data_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
@@ -20,10 +20,12 @@ import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout_detail.dart';
 import 'package:jalur/views/coach_info_page/coach_info_page.dart';
 import 'package:jalur/views/login/login_page.dart';
+import 'package:jalur/views/profile_info_page/profile_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
 import 'package:jalur/views/schedule_info_page/shedule_info_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
 
+import '../bloc/couch_data_page/coach_workout_event.dart';
 import '../bloc/home_page/homepage_bloc.dart';
 import '../bloc/home_page/homepage_state.dart';
 import '../response_api/get_workout.dart';
@@ -38,6 +40,7 @@ class Routes {
   static const String coach = '/coach';
   static const String detailWorkout = '/detailWorkout';
   static const String homepage = '/homepage';
+  static const String profile = '/profile';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -162,6 +165,9 @@ class Routes {
             ),
           ),
         );
+      case profile:
+        final int pageIndex = settings.arguments as int;
+        return MaterialPageRoute(builder: (context) => BlocProvider<ProfileDataBloc>(create: (context) => ProfileDataBloc(), child: ProfilePage(selectedIndex: pageIndex,),),);
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

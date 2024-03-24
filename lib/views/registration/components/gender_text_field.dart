@@ -5,21 +5,25 @@ Widget genderTextField({required BuildContext context, required TextEditingContr
     onTap: () {
       showDialog(context: context, builder: (BuildContext context) {
         return SimpleDialog(
-          title: const Text("Выберите ваш пол"),
+          title: const Center(child: Text("Выберите ваш пол")),
           children: <Widget> [
-            SimpleDialogOption(
-              onPressed: () {
-                controller.text = 'Мужчина';
-                Navigator.pop(context);
-              },
-              child: const Text('Мужчина'),
+            Center(
+              child: SimpleDialogOption(
+                onPressed: () {
+                  controller.text = 'Мужчина';
+                  Navigator.pop(context);
+                },
+                child: const Text('Мужчина'),
+              ),
             ),
-            SimpleDialogOption(
-              onPressed: () {
-                controller.text = 'Женщина';
-                Navigator.pop(context);
-              },
-              child: const Text('Женщина'),
+            Center(
+              child: SimpleDialogOption(
+                onPressed: () {
+                  controller.text = 'Женщина';
+                  Navigator.pop(context);
+                },
+                child: const Text('Женщина'),
+              ),
             )
           ],
         );

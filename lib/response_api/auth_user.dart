@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Login {
   List<ResponseUser> datatosave = [];
 
-  Future<void> _saveToken(String token) async {
+  Future<void> _saveToken(String token, int id) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setString('auth_token', token);
+    await preferences.setInt('user_id', id);
+    print(id);
   }
 
   Future<bool> authUser(String phone, String code) async {
@@ -24,7 +26,7 @@ class Login {
       final responseData = json.decode(response.body);
       if (responseData['data'] != null &&
           responseData['data']['user'] != null) {
-        await _saveToken(responseData['data']['access_key']);
+        await _saveToken(responseData['data']['access_key'], responseData['data']['user']['id']);
         return true;
       }
       throw Exception("Не удалось авторизоваться ${response.body}");

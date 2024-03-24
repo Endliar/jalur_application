@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/couch_data_page/coach_workout_bloc.dart';
-import 'package:jalur/bloc/couch_data_page/coach_workout_event.dart';
 import 'package:jalur/bloc/couch_data_page/coach_workout_state.dart';
 import 'package:jalur/models/coach.dart';
 import 'package:jalur/response_api/get_coach_data.dart';
 import 'package:jalur/views/coach_info_page/coach_detail_page.dart';
 
+import '../../bloc/couch_data_page/coach_workout_event.dart';
 import '../../helpers/colors.dart';
 import '../../helpers/routes.dart';
 
