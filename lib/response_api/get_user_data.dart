@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/coach.dart';
 
 class GetUserData {
-  Future<List<Coach>> getUserData(int id) async {
+  Future<List<Coach>> getUserData(int? id) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
     var url = Uri.parse('http://89.104.69.88/api/user/show/$id');

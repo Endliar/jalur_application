@@ -1,4 +1,4 @@
-import '../../response_api/create_user.dart';
+import '../../models/coach.dart';
 
 abstract class ProfileDataState {}
 
@@ -9,7 +9,7 @@ class LoadingProfileDataState extends ProfileDataState {}
 class UserLoggedOutState extends ProfileDataState {}
 
 class LoadProfileDataSuccess extends ProfileDataState {
-  final List<User> users;
+  final List<Coach> users;
 
   LoadProfileDataSuccess(this.users);
 }

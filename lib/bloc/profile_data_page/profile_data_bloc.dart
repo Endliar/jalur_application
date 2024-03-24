@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/profile_data_page/profile_data_event.dart';
+import 'package:jalur/models/coach.dart';
+import 'package:jalur/response_api/get_user_data.dart';
 import 'package:jalur/response_api/user_logout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,11 +12,13 @@ class ProfileDataBloc extends Bloc<ProfilehDataEvent, ProfileDataState> {
     on<UserLogoutEvent>(_onUserLogoutEvent);
   }
 
-  void _onUserLogoutEvent(UserLogoutEvent event, Emitter<ProfileDataState> emit) async {
+  void _onUserLogoutEvent(
+      UserLogoutEvent event, Emitter<ProfileDataState> emit) async {
     try {
       emit(LoadingProfileDataState());
 
-      final SharedPreferences preferences = await SharedPreferences.getInstance();
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
       final int? userId = preferences.getInt('user_id');
 
       final UserLogout _getUserData = UserLogout();
@@ -24,7 +28,21 @@ class ProfileDataBloc extends Bloc<ProfilehDataEvent, ProfileDataState> {
       await preferences.remove('user_id');
 
       emit(UserLoggedOutState());
+    } catch (e) {
+      emit(ProfileErrorState(e.toString()));
+    }
+  }
 
+  void _onLoadUserProfileEvent(
+      LoadProfileDataEvent event, Emitter<ProfileDataState> emit) async {
+    try {
+      emit(LoadingProfileDataState());
+      final GetUserData _getUserData = GetUserData();
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      final int? userId = preferences.getInt('user_id');
+      final List<Coach> userData = await _getUserData.getUserData(userId);
+      emit(LoadProfileDataSuccess(userData));
     } catch (e) {
       emit(ProfileErrorState(e.toString()));
     }
