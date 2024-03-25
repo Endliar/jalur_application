@@ -35,7 +35,8 @@ class _HomepageState extends State<Homepage> {
             .pushNamed(Routes.coach, arguments: _selectedIndex);
         break;
       case 3:
-        Navigator.pushNamed(context, Routes.profile, arguments: _selectedIndex);
+        Navigator.of(context)
+            .pushNamed(Routes.editProfile, arguments: _selectedIndex);
       default:
     }
   }

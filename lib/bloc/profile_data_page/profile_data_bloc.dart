@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/profile_data_page/profile_data_event.dart';
-import 'package:jalur/models/coach.dart';
-import 'package:jalur/response_api/get_user_data.dart';
 import 'package:jalur/response_api/user_logout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,6 +8,7 @@ import 'profile_data_state.dart';
 class ProfileDataBloc extends Bloc<ProfilehDataEvent, ProfileDataState> {
   ProfileDataBloc() : super(InitialState()) {
     on<UserLogoutEvent>(_onUserLogoutEvent);
+    on<LoadProfileDataEvent>(_onLoadUserProfileEvent);
   }
 
   void _onUserLogoutEvent(
@@ -37,12 +36,9 @@ class ProfileDataBloc extends Bloc<ProfilehDataEvent, ProfileDataState> {
       LoadProfileDataEvent event, Emitter<ProfileDataState> emit) async {
     try {
       emit(LoadingProfileDataState());
-      final GetUserData _getUserData = GetUserData();
       final SharedPreferences preferences =
           await SharedPreferences.getInstance();
       final int? userId = preferences.getInt('user_id');
-      final List<Coach> userData = await _getUserData.getUserData(userId);
-      emit(LoadProfileDataSuccess(userData));
     } catch (e) {
       emit(ProfileErrorState(e.toString()));
     }

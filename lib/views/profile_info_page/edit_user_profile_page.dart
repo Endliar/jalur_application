@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../helpers/colors.dart';
+import '../../models/coach.dart';
 
 class EditUserProfilePage extends StatefulWidget {
-  const EditUserProfilePage({super.key});
+  final Coach coach;
+  const EditUserProfilePage({
+    super.key,
+    required this.coach,
+  });
 
   @override
   State<EditUserProfilePage> createState() => _EditUserProfilePageState();
@@ -17,7 +22,7 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
         automaticallyImplyLeading: false,
         backgroundColor: kSecondaryColor,
         title: const Text(
-          "Редактирование данных",
+          "Данные пользователя",
           style: TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -26,14 +31,9 @@ class _EditUserProfilePageState extends State<EditUserProfilePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const TextField(
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Phone',
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Update'),
+                  labelText: widget.coach.phone ?? 'Номер не указан'),
             ),
           ],
         ),

@@ -9,9 +9,9 @@ class LoadingProfileDataState extends ProfileDataState {}
 class UserLoggedOutState extends ProfileDataState {}
 
 class LoadProfileDataSuccess extends ProfileDataState {
-  final List<Coach> users;
+  final List<Coach> coaches;
 
-  LoadProfileDataSuccess(this.users);
+  LoadProfileDataSuccess(this.coaches);
 }
 
 class ProfileErrorState extends ProfileDataState {

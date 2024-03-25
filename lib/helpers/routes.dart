@@ -20,7 +20,6 @@ import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout_detail.dart';
 import 'package:jalur/views/coach_info_page/coach_info_page.dart';
 import 'package:jalur/views/login/login_page.dart';
-import 'package:jalur/views/profile_info_page/profile_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
 import 'package:jalur/views/schedule_info_page/shedule_info_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
@@ -30,6 +29,7 @@ import '../bloc/home_page/homepage_bloc.dart';
 import '../bloc/home_page/homepage_state.dart';
 import '../response_api/get_workout.dart';
 import '../views/home_page/homepage.dart';
+import '../views/profile_info_page/profile_page.dart';
 import '../views/workout_page/workout_page.dart';
 
 class Routes {
@@ -40,7 +40,7 @@ class Routes {
   static const String coach = '/coach';
   static const String detailWorkout = '/detailWorkout';
   static const String homepage = '/homepage';
-  static const String profile = '/profile';
+  static const String editProfile = '/editProfile';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -165,9 +165,16 @@ class Routes {
             ),
           ),
         );
-      case profile:
+      case editProfile:
         final int pageIndex = settings.arguments as int;
-        return MaterialPageRoute(builder: (context) => BlocProvider<ProfileDataBloc>(create: (context) => ProfileDataBloc(), child: ProfilePage(selectedIndex: pageIndex,),),);
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<ProfileDataBloc>(
+            create: (context) => ProfileDataBloc(),
+            child: ProfilePage(
+              selectedIndex: pageIndex,
+            ),
+          ),
+        );
       default:
         return MaterialPageRoute(
             builder: (_) => const Scaffold(

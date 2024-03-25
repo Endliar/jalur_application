@@ -23,7 +23,7 @@ class GetCoachData {
     }
   }
 
-  Future<Coach> getUserData(int id) async {
+  Future<Coach> getUserData(int? id) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
     var url = Uri.parse('http://89.104.69.88/api/user/show/$id');
