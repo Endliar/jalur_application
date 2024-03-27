@@ -7,7 +7,6 @@ import 'package:jalur/bloc/detail_workout_page/detail_workout_event.dart';
 import 'package:jalur/bloc/detail_workout_page/detail_workout_state.dart';
 import 'package:jalur/bloc/home_page/homepage_event.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
-import 'package:jalur/bloc/profile_data_page/profile_data_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
@@ -29,7 +28,6 @@ import '../bloc/home_page/homepage_bloc.dart';
 import '../bloc/home_page/homepage_state.dart';
 import '../response_api/get_workout.dart';
 import '../views/home_page/homepage.dart';
-import '../views/profile_info_page/profile_page.dart';
 import '../views/workout_page/workout_page.dart';
 
 class Routes {
@@ -162,16 +160,6 @@ class Routes {
                   child: Text('Данные о конкретной тренировке не загружены'),
                 );
               },
-            ),
-          ),
-        );
-      case editProfile:
-        final int pageIndex = settings.arguments as int;
-        return MaterialPageRoute(
-          builder: (context) => BlocProvider<ProfileDataBloc>(
-            create: (context) => ProfileDataBloc(),
-            child: ProfilePage(
-              selectedIndex: pageIndex,
             ),
           ),
         );
