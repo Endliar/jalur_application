@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jalur/response_api/user_logout.dart';
+import 'package:jalur/views/profile_info_page/edit_profile_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -101,7 +102,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: TextButton(
                 onPressed: () {
-                  // обработчик нажатия для "Профиль"
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const EditProfilePage(),
+                  ));
                 },
                 child: const Text('Профиль',
                     style: TextStyle(color: Colors.white)),

@@ -4,15 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserDataUpdate {
   Future<void> userDataUpdate(
-      {required int id, required String phone, required String weight}) async {
+      {required int? id, String? phone, String? weight}) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
     var url = Uri.parse('http://89.104.69.88/api/user/update');
 
-    final body = jsonEncode({'id': id, 'phone': phone, 'weight': weight});
+    final body = jsonEncode({'id': id, 'phone': phone});
 
-    final response = await http.post(url,
+    final response = await http.put(url,
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': 'Bearer $authToken',
         },
         body: body);
