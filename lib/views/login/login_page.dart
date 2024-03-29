@@ -100,29 +100,31 @@ class _LoginPageState extends State<LoginPage> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));
             } else if (state is LoginSuccessState) {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BlocProvider<HomepageBloc>(
-                  create: (context) =>
-                      HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
-                        ..add(LoadWorkoutEvent()),
-                  child: BlocBuilder<HomepageBloc, HomepageState>(
-                    builder: (context, state) {
-                      if (state is LoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (state is HomepageLoadWorkoutSuccess) {
-                        return Homepage(workouts: state.workouts);
-                      } else if (state is HomepageErrorState) {
-                        return Center(child: Text('Error: ${state.error}'));
-                      }
-                      return const Center(
-                        child: Text('Данные не загружены'),
-                      );
-                    },
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomepageBloc>(
+                      create: (context) =>
+                          HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                            ..add(LoadWorkoutEvent()),
+                      child: BlocBuilder<HomepageBloc, HomepageState>(
+                        builder: (context, state) {
+                          if (state is LoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is HomepageLoadWorkoutSuccess) {
+                            return Homepage(workouts: state.workouts);
+                          } else if (state is HomepageErrorState) {
+                            return Center(child: Text('Error: ${state.error}'));
+                          }
+                          return const Center(
+                            child: Text('Данные не загружены'),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                ),
-              ));
+                  (Route<dynamic> route) => false);
             }
           },
           child: BlocBuilder<LoginBloc, LoginState>(

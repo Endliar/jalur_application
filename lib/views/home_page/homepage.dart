@@ -27,16 +27,19 @@ class _HomepageState extends State<Homepage> {
       case 0:
         break;
       case 1:
-        Navigator.of(context)
-            .pushNamed(Routes.schedule, arguments: _selectedIndex);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.schedule, (Route<dynamic> route) => false,
+            arguments: _selectedIndex);
         break;
       case 2:
-        Navigator.of(context)
-            .pushNamed(Routes.coach, arguments: _selectedIndex);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.coach, (Route<dynamic> route) => false,
+            arguments: _selectedIndex);
         break;
       case 3:
-        Navigator.of(context)
-            .pushNamed(Routes.editProfile, arguments: _selectedIndex);
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.profile, (Route<dynamic> route) => false,
+            arguments: _selectedIndex);
       default:
     }
   }

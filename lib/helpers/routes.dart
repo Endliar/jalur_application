@@ -19,6 +19,7 @@ import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout_detail.dart';
 import 'package:jalur/views/coach_info_page/coach_info_page.dart';
 import 'package:jalur/views/login/login_page.dart';
+import 'package:jalur/views/profile_info_page/profile_page.dart';
 import 'package:jalur/views/registration/registration_page.dart';
 import 'package:jalur/views/schedule_info_page/shedule_info_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
@@ -38,7 +39,7 @@ class Routes {
   static const String coach = '/coach';
   static const String detailWorkout = '/detailWorkout';
   static const String homepage = '/homepage';
-  static const String editProfile = '/editProfile';
+  static const String profile = '/editProfile';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -162,6 +163,11 @@ class Routes {
               },
             ),
           ),
+        );
+      case profile:
+        final int pageIndex = settings.arguments as int;
+        return MaterialPageRoute(
+          builder: (context) => ProfilePage(selectedIndex: pageIndex),
         );
       default:
         return MaterialPageRoute(

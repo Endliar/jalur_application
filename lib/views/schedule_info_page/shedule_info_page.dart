@@ -32,15 +32,21 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
 
       switch (index) {
         case 0:
-          Navigator.of(context).pushNamed(Routes.homepage);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.homepage,
+            (Route<dynamic> route) => false,
+          );
         case 1:
-          Navigator.of(context).pushNamed(Routes.schedule);
           break;
         case 2:
-          Navigator.of(context)
-              .pushNamed(Routes.coach, arguments: _selectedIndex);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.coach, (Route<dynamic> route) => false,
+              arguments: _selectedIndex);
           break;
         case 3:
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.profile, (Route<dynamic> route) => false,
+              arguments: _selectedIndex);
           break;
         default:
       }
