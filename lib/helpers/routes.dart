@@ -80,7 +80,9 @@ class Routes {
               )),
         );
       case schedule:
-        final int pageIndex = settings.arguments as int;
+        final args = settings.arguments as Map;
+        final int pageIndex = args['selectedIndex'] as int;
+        final DateTime selectedDate = args['selectedDate'] as DateTime;
         return MaterialPageRoute(
           builder: (context) => BlocProvider<ScheduleDataBloc>(
             create: (context) => ScheduleDataBloc(ApiServiceGetSchedule(),
@@ -94,6 +96,7 @@ class Routes {
                   return SheduleInfoPage(
                     schedules: state.schedules,
                     selectedIndex: pageIndex,
+                    selectedDate: selectedDate,
                   );
                 } else if (state is ScheduleErrorState) {
                   return Center(

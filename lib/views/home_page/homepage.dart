@@ -17,11 +17,17 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0;
+  DateTime pickedDate = DateTime.now();
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
+    final args = {
+        'selectedIndex': _selectedIndex,
+        'selectedDate': pickedDate,
+        };
 
     switch (index) {
       case 0:
@@ -29,7 +35,7 @@ class _HomepageState extends State<Homepage> {
       case 1:
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.schedule, (Route<dynamic> route) => false,
-            arguments: _selectedIndex);
+            arguments: args);
         break;
       case 2:
         Navigator.of(context).pushNamedAndRemoveUntil(
