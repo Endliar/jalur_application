@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/models/schedule.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../helpers/colors.dart';
@@ -10,7 +14,10 @@ class SheduleInfoPage extends StatefulWidget {
   final List<Schedule> schedules;
   final int selectedIndex;
   const SheduleInfoPage(
-      {super.key, required this.schedules, required this.selectedIndex, required this.selectedDate});
+      {super.key,
+      required this.schedules,
+      required this.selectedIndex,
+      required this.selectedDate});
 
   @override
   State<SheduleInfoPage> createState() => _SheduleInfoPageState();
@@ -86,14 +93,14 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                   decoration: const BoxDecoration(
                     color: kPrimaryColor,
                     shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      date.day.toString(),
-                      style: const TextStyle(color: Colors.white),
-      ),
-    );
-  },
-),
+                  ),
+                  child: Text(
+                    date.day.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              },
+            ),
           ),
           Expanded(
             child: ListView.builder(
@@ -106,7 +113,78 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                     title: Text(schedule.workoutName),
                     subtitle: Text(schedule.typeName),
                     trailing: ElevatedButton(
-                        onPressed: () {}, child: const Text('Записаться')),
+                        onPressed: () async {
+                          final SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          final int? userId =
+                              sharedPreferences.getInt('user_id');
+                          final Map<int, String> halls = {
+                            2: 'Зал тренировок',
+                            3: 'Зал практик'
+                          };
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                int? hallId;
+                                String totalTraining = '';
+                                return AlertDialog(
+                                  title: const Text('Записаться на тренировку'),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextField(
+                                        decoration: const InputDecoration(
+                                            labelText: 'Количество занятий'),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
+                                        onChanged: (value) {
+                                          totalTraining = value;
+                                        },
+                                      ),
+                                      DropdownButton<int>(
+                                        value: hallId,
+                                        hint: const Text('Выберите зал'),
+                                        items: halls.entries.map((entry) {
+                                          return DropdownMenuItem<int>(
+                                              value: entry.key,
+                                              child: Text(entry.value));
+                                        }).toList(),
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            hallId = newValue;
+                                          });
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: const Text('Отмена')),
+                                    TextButton(
+                                        onPressed: () {
+                                          if (totalTraining.isNotEmpty &&
+                                              hallId != null) {
+                                            context
+                                                .read()<ScheduleDataBloc>()
+                                                .add(CreateRecordEvent(
+                                                    totalTraining: int.parse(
+                                                        totalTraining),
+                                                    scheduleId: schedule.id,
+                                                    userId: userId,
+                                                    hallId: hallId,
+                                                    visitationDate:
+                                                        _selectedDate));
+                                          }
+                                        },
+                                        child: const Text('Ок'))
+                                  ],
+                                );
+                              });
+                        },
+                        child: const Text('Записаться')),
                   ),
                 );
               },
@@ -132,3 +210,6 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
     );
   }
 }
+
+
+// Чтобы 

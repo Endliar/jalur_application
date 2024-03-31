@@ -14,18 +14,20 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
   final ApiServiceGetWorkoutDetail getWorkoutDetail;
   final ApiServiceCreateRecord apiServiceCreateRecord;
 
-  ScheduleDataBloc(
-      this.getScheduleData, this.getWorkoutDetail, this.getTypeWorkout, this.apiServiceCreateRecord)
+  ScheduleDataBloc(this.getScheduleData, this.getWorkoutDetail,
+      this.getTypeWorkout, this.apiServiceCreateRecord)
       : super(InitialState()) {
     on<LoadScheduleDataEvent>(_onLoadScheduleDataEvent);
     on<CreateRecordEvent>((event, emit) async {
       try {
         final bool isSuccess = await apiServiceCreateRecord.createRecord(
-          scheduleId: event.scheduleId, 
-          userId: event.userId, 
-          hallId: event.hallId, 
-          visitationDate: event.visitationDate);
-        
+          scheduleId: event.scheduleId,
+          userId: event.userId,
+          hallId: event.hallId,
+          visitationDate: event.visitationDate,
+          totalTraining: event.totalTraining,
+        );
+
         if (isSuccess) {
           emit(RecordCreationSuccessState());
         } else {
