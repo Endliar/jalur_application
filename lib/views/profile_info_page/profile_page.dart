@@ -17,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 0;
+  DateTime pickedDate = DateTime.now();
 
   @override
   void initState() {
@@ -29,6 +30,11 @@ class _ProfilePageState extends State<ProfilePage> {
       _selectedIndex = index;
     });
 
+    final args = {
+        'selectedIndex': _selectedIndex,
+        'selectedDate': pickedDate,
+        };
+
     switch (index) {
       case 0:
         Navigator.of(context).pushNamedAndRemoveUntil(
@@ -37,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
       case 1:
         Navigator.of(context).pushNamedAndRemoveUntil(
             Routes.schedule, (Route<dynamic> route) => false,
-            arguments: _selectedIndex);
+            arguments: args);
         break;
       case 2:
         Navigator.of(context).pushNamedAndRemoveUntil(
