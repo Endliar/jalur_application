@@ -12,6 +12,7 @@ import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/response_api/crate_record.dart';
 import 'package:jalur/response_api/create_user.dart';
 import 'package:jalur/response_api/get_coach_data.dart';
 import 'package:jalur/response_api/get_schedule.dart';
@@ -86,7 +87,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider<ScheduleDataBloc>(
             create: (context) => ScheduleDataBloc(ApiServiceGetSchedule(),
-                ApiServiceGetWorkoutDetail(), GetTypeWorkout())
+                ApiServiceGetWorkoutDetail(), GetTypeWorkout(), ApiServiceCreateRecord())
               ..add(LoadScheduleDataEvent()),
             child: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
               builder: (context, state) {

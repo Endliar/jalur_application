@@ -16,3 +16,11 @@ class ScheduleErrorState extends ScheduleDataState {
   final String error;
   ScheduleErrorState(this.error);
 }
+
+class RecordCreationSuccessState extends ScheduleDataState {}
+
+class RecordCreationFailureState extends ScheduleDataState {
+  final String error;
+
+  RecordCreationFailureState(this.error);
+}
