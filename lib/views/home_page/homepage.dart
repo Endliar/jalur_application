@@ -25,9 +25,9 @@ class _HomepageState extends State<Homepage> {
     });
 
     final args = {
-        'selectedIndex': _selectedIndex,
-        'selectedDate': pickedDate,
-        };
+      'selectedIndex': _selectedIndex,
+      'selectedDate': pickedDate,
+    };
 
     switch (index) {
       case 0:

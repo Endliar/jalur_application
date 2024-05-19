@@ -7,13 +7,15 @@ class CreateRecordEvent extends ScheduleDataEvent {
   final int? userId;
   final int? hallId;
   final int totalTraining;
-  final DateTime visitationDate;
+  final String typeRecord;
+  final String visitationDate;
 
   CreateRecordEvent({
     required this.totalTraining,
     required this.scheduleId,
     required this.userId,
     required this.hallId,
+    required this.typeRecord,
     required this.visitationDate,
   });
 }

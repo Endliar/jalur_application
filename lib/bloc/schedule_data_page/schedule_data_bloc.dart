@@ -26,6 +26,7 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
           hallId: event.hallId,
           visitationDate: event.visitationDate,
           totalTraining: event.totalTraining,
+          typeRecord: event.typeRecord,
         );
 
         if (isSuccess) {

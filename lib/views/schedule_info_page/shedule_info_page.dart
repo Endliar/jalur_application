@@ -112,74 +112,14 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                     title: Text(schedule.workoutName),
                     subtitle: Text(schedule.typeName),
                     trailing: ElevatedButton(
-                      onPressed: () {
-                        final Map<int, String> halls = {
-                          2: 'Зал тренировок',
-                          3: 'Зал практик'
-                        };
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              int? selectedHallId;
-                              String? totalTraining;
-
-                              return AlertDialog(
-                                title: const Text('Запись на тренировку'),
-                                content: Column(
-                                  children: [
-                                    TextField(
-                                      decoration: const InputDecoration(
-                                          labelText: 'Количество занятий'),
-                                      keyboardType: TextInputType.number,
-                                      onChanged: (value) {
-                                        totalTraining = value;
-                                      },
-                                    ),
-                                    DropdownButton<int>(
-                                      items: halls.entries.map((entry) {
-                                        return DropdownMenuItem<int>(
-                                          value: entry.key,
-                                          child: Text(entry.value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          selectedHallId = newValue;
-                                        });
-                                      },
-                                    )
-                                  ],
-                                ),
-                                actions: <Widget>[
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Отмена')),
-                                  ElevatedButton(
-                                      onPressed: () async {
-                                        SharedPreferences sharedPreferences =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        final int? userId =
-                                            sharedPreferences.getInt('user_id');
-
-                                        print(totalTraining);
-                                        print(selectedHallId);
-                                        print(_selectedDate);
-
-                                        CreateRecordEvent(
-                                            totalTraining:
-                                                int.parse(totalTraining!),
-                                            scheduleId: schedule.id,
-                                            userId: userId,
-                                            hallId: selectedHallId,
-                                            visitationDate: _selectedDate);
-                                      },
-                                      child: const Text('Записаться'))
-                                ],
-                              );
-                            });
+                      onPressed: () async {
+                        CreateRecordEvent(
+                            totalTraining: 444,
+                            scheduleId: 3,
+                            userId: 1,
+                            hallId: 2,
+                            typeRecord: "Тренировка в зале",
+                            visitationDate: "01.01.2024");
                       },
                       child: const Text('Записаться'),
                     ),
