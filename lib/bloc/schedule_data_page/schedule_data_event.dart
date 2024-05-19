@@ -11,7 +11,6 @@ class CreateRecordEvent extends ScheduleDataEvent {
   final String visitionDate;
 
   CreateRecordEvent({
-    required this.totalTraining,
     required this.scheduleId,
     required this.userId,
     required this.totalTraining,
