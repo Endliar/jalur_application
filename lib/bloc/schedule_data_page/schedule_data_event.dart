@@ -5,13 +5,17 @@ class LoadScheduleDataEvent extends ScheduleDataEvent {}
 class CreateRecordEvent extends ScheduleDataEvent {
   final int scheduleId;
   final int userId;
+  final int totalTraining;
   final int hallId;
-  final String visitationDate;
+  final String typeRecord;
+  final String visitionDate;
 
   CreateRecordEvent({
     required this.scheduleId,
     required this.userId,
+    required this.totalTraining,
     required this.hallId,
-    required this.visitationDate,
+    required this.typeRecord,
+    required this.visitionDate,
   });
 }

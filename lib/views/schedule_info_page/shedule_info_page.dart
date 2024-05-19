@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/models/schedule.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -10,7 +14,10 @@ class SheduleInfoPage extends StatefulWidget {
   final List<Schedule> schedules;
   final int selectedIndex;
   const SheduleInfoPage(
-      {super.key, required this.schedules, required this.selectedIndex, required this.selectedDate});
+      {super.key,
+      required this.schedules,
+      required this.selectedIndex,
+      required this.selectedDate});
 
   @override
   State<SheduleInfoPage> createState() => _SheduleInfoPageState();
@@ -56,6 +63,19 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
     }
   }
 
+  // TODO: доделать тему с выбором даты по нажатию
+
+  Future<DateTime?> _pickDate(BuildContext context) async {
+    DateTime initialDate = DateTime.now();
+    DateTime firstDate = initialDate.subtract(const Duration(days: 365));
+    DateTime lastDate = initialDate.add(const Duration(days: 365));
+
+    final DateTime? pickedDate = await showDatePicker(
+        context: context, firstDate: firstDate, lastDate: lastDate);
+    return pickedDate;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -86,14 +106,14 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                   decoration: const BoxDecoration(
                     color: kPrimaryColor,
                     shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      date.day.toString(),
-                      style: const TextStyle(color: Colors.white),
-      ),
-    );
-  },
-),
+                  ),
+                  child: Text(
+                    date.day.toString(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                );
+              },
+            ),
           ),
           Expanded(
             child: ListView.builder(
@@ -106,7 +126,23 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                     title: Text(schedule.workoutName),
                     subtitle: Text(schedule.typeName),
                     trailing: ElevatedButton(
-                        onPressed: () {}, child: const Text('Записаться')),
+                        onPressed: () async {
+                          DateTime? selectedDate = await _pickDate(context);
+                          if (selectedDate != null) {
+                            String formattedDate =
+                                DateFormat('dd.MM.yyyy').format(selectedDate);
+                            ScheduleDataBloc scheduleBloc =
+                                BlocProvider.of<ScheduleDataBloc>(context);
+                            scheduleBloc.add(CreateRecordEvent(
+                                scheduleId: 3,
+                                userId: 22,
+                                totalTraining: 777,
+                                hallId: 2,
+                                typeRecord: "Тренировка в зале",
+                                visitionDate: formattedDate));
+                          }
+                        },
+                        child: const Text('Записаться')),
                   ),
                 );
               },
