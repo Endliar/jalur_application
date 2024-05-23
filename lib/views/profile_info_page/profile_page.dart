@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
+import 'package:jalur/response_api/get_record.dart';
 import 'package:jalur/response_api/user_logout.dart';
 import 'package:jalur/views/profile_info_page/edit_profile_page.dart';
+import 'package:jalur/views/profile_info_page/record_data_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,9 +35,9 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     final args = {
-        'selectedIndex': _selectedIndex,
-        'selectedDate': pickedDate,
-        };
+      'selectedIndex': _selectedIndex,
+      'selectedDate': pickedDate,
+    };
 
     switch (index) {
       case 0:
@@ -129,7 +133,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: TextButton(
                 onPressed: () {
-                  // обработчик нажатия для "История записей"
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BlocProvider<RecordDataBloc>(
+                      create: (context) =>
+                          RecordDataBloc(getRecordApi: GetRecordApi()),
+                      child: const RecordDataPage(),
+                    ),
+                  ));
                 },
                 child: const Text(
                   'История записей',

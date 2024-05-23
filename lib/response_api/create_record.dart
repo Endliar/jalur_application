@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class ApiServiceCreateRecord {
   Future<bool> createRecord({
     required int scheduleId,
-    required int userId,
+    required int? userId,
     required int totalTraining,
     required int hallId,
     required String typeRecord,

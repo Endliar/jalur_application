@@ -23,13 +23,14 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
         final bool isSuccess = await apiServiceCreateRecord.createRecord(
             scheduleId: event.scheduleId,
             userId: event.userId,
-            hallId: event.hallId,
-            visitionDate: event.visitionDate,
             totalTraining: event.totalTraining,
-            typeRecord: event.typeRecord);
+            hallId: event.hallId,
+            typeRecord: event.typeRecord,
+            visitionDate: event.visitionDate);
 
         if (isSuccess) {
           emit(RecordCreationSuccessState());
+          add(LoadScheduleDataEvent());
         } else {
           emit(RecordCreationFailureState("Не удалось создать запись"));
         }

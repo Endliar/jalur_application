@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/models/schedule.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -64,79 +65,133 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
     }
   }
 
+  Future<DateTime?> _pickDate(BuildContext context) async {
+    DateTime initialDate = DateTime.now();
+    DateTime firstDate = initialDate.subtract(const Duration(days: 365));
+    DateTime lastDate = initialDate.add(const Duration(days: 365));
+
+    final DateTime? pickedDate = await showDatePicker(
+        context: context, firstDate: firstDate, lastDate: lastDate);
+
+    return pickedDate;
+  }
+
+  // Здесь надо заебашить как в homepage'е
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: kSecondaryColor,
-        title: const Text(
-          "Расписание",
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: kSecondaryColor,
+          title: const Text(
+            "Расписание",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          TableCalendar(
-            locale: 'ru_RU',
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDate, day);
-            },
-            focusedDay: _selectedDate,
-            firstDay: DateTime.utc(2010, 10, 16),
-            lastDay: DateTime.utc(2030, 3, 14),
-            calendarFormat: CalendarFormat.month,
-            calendarBuilders: CalendarBuilders(
-              selectedBuilder: (context, date, _) {
-                return Container(
-                  margin: const EdgeInsets.all(4.0),
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: kPrimaryColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                );
-              },
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.schedules.length,
-              itemBuilder: (context, index) {
-                final schedule = widget.schedules[index];
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text(schedule.workoutName),
-                    subtitle: Text(schedule.typeName),
-                    trailing: ElevatedButton(
-                        onPressed: () {}, child: const Text('Записаться')),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.schedule), label: 'Расписание'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.fitness_center), label: 'Тренера'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined), label: 'Профиль'),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
-    );
+        body: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
+          builder: (context, state) {
+            if (state is LoadingScheduleDataState) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is LoadScheduleDataSuccess) {
+              return ListView.builder(
+                itemCount: state.schedules.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                        title: Text(state.schedules[index].workoutName),
+                        subtitle: Text(state.schedules[index].typeName),
+                        trailing: ElevatedButton(
+                            onPressed: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              final userId = prefs.getInt('user_id');
+                              final DateTime? pickedDate =
+                                  await _pickDate(context);
+
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat('MM.dd.yyyy').format(pickedDate);
+                                List<String> typesList = [
+                                  'Тренировка в зале',
+                                  'Глемпинг'
+                                ];
+                                int totalTraining = 0;
+                                String typeRecord = typesList.first;
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext dialogContext) {
+                                    return AlertDialog(
+                                      title: Text("Дополнительная информация"),
+                                      content: Column(
+                                        children: [
+                                          TextField(
+                                            onChanged: (value) {
+                                              totalTraining = int.parse(value);
+                                            },
+                                            decoration: InputDecoration(
+                                                hintText: 'Количество занятий'),
+                                          ),
+                                          DropdownButton(
+                                              value: typeRecord,
+                                              items:
+                                                  typesList.map((String type) {
+                                                return DropdownMenuItem<String>(
+                                                    value: type,
+                                                    child: Text(type));
+                                              }).toList(),
+                                              onChanged: (newValue) {
+                                                typeRecord = newValue!;
+                                              }),
+                                        ],
+                                      ),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(dialogContext).pop();
+                                              if (totalTraining != null &&
+                                                  typeRecord != null) {
+                                                BlocProvider.of<
+                                                            ScheduleDataBloc>(
+                                                        context)
+                                                    .add(CreateRecordEvent(
+                                                        scheduleId: state
+                                                            .schedules[index]
+                                                            .id,
+                                                        userId: userId,
+                                                        totalTraining:
+                                                            totalTraining,
+                                                        hallId: state
+                                                            .schedules[index]
+                                                            .hallId,
+                                                        typeRecord: typeRecord,
+                                                        visitionDate:
+                                                            formattedDate));
+                                              }
+                                            },
+                                            child: Text('Ок'))
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: const Text("Записаться"))),
+                  );
+                },
+              );
+            } else if (state is ScheduleErrorState) {
+              return Center(child: Text('Error: ${state.error}'));
+            } else {
+              return const Center(
+                child: Text('Нет данных о записях'),
+              );
+            }
+          },
+        ));
   }
 }
