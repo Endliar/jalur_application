@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/models/schedule.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +64,6 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -112,17 +114,7 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                     title: Text(schedule.workoutName),
                     subtitle: Text(schedule.typeName),
                     trailing: ElevatedButton(
-                      onPressed: () async {
-                        CreateRecordEvent(
-                            totalTraining: 444,
-                            scheduleId: 3,
-                            userId: 1,
-                            hallId: 2,
-                            typeRecord: "Тренировка в зале",
-                            visitationDate: "01.01.2024");
-                      },
-                      child: const Text('Записаться'),
-                    ),
+                        onPressed: () {}, child: const Text('Записаться')),
                   ),
                 );
               },

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jalur/response_api/crate_record.dart';
+import 'package:jalur/response_api/create_record.dart';
 import 'package:jalur/response_api/get_type_workout.dart';
 
 import '../../models/schedule.dart';
@@ -21,13 +21,12 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
     on<CreateRecordEvent>((event, emit) async {
       try {
         final bool isSuccess = await apiServiceCreateRecord.createRecord(
-          scheduleId: event.scheduleId,
-          userId: event.userId,
-          hallId: event.hallId,
-          visitationDate: event.visitationDate,
-          totalTraining: event.totalTraining,
-          typeRecord: event.typeRecord,
-        );
+            scheduleId: event.scheduleId,
+            userId: event.userId,
+            hallId: event.hallId,
+            visitionDate: event.visitionDate,
+            totalTraining: event.totalTraining,
+            typeRecord: event.typeRecord);
 
         if (isSuccess) {
           emit(RecordCreationSuccessState());
