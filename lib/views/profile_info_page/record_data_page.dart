@@ -4,6 +4,8 @@ import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
 import 'package:jalur/bloc/record_data_page/record_data_event.dart';
 import 'package:jalur/bloc/record_data_page/record_data_state.dart';
 
+import '../../helpers/colors.dart';
+
 class RecordDataPage extends StatefulWidget {
   const RecordDataPage({super.key});
 
@@ -22,7 +24,13 @@ class _RecordDataPageState extends State<RecordDataPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("История записей"),
+        automaticallyImplyLeading: false,
+        backgroundColor: kSecondaryColor,
+        title: const Text(
+          "История записей",
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
       ),
       body: BlocBuilder<RecordDataBloc, RecordDataState>(
         builder: (context, state) {
@@ -36,8 +44,18 @@ class _RecordDataPageState extends State<RecordDataPage> {
                 return Card(
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
+                    isThreeLine: true,
                     title: Text('Запись №${record.id}'),
-                    subtitle: Text('Дата создания: ${record.createdAt}'),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            'Дата записи: ${record.visitionDate?.visitionDate ?? "Не указана"}'),
+                        Text('Количество тренировок: ${record.totalTraining}'),
+                        Text(
+                            'Статус: ${record.visitionDate?.status ?? "Отсутствует"}'),
+                      ],
+                    ),
                     trailing: TextButton(
                         onPressed: () {}, child: const Text('Отменить')),
                   ),

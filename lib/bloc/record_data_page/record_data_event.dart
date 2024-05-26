@@ -1,3 +1,5 @@
+import 'package:jalur/models/visition_date.dart';
+
 abstract class RecordDataEvent {}
 
 class LoadRecordDataEvent extends RecordDataEvent {}
@@ -8,6 +10,7 @@ class GetRecordEvent extends RecordDataEvent {
   final int scheduleId;
   final int totalTraining;
   final int remainingTraining;
+  final VisitionDate visitionDate;
   final String createdAt;
   final String updatedAt;
 
@@ -17,6 +20,7 @@ class GetRecordEvent extends RecordDataEvent {
     required this.scheduleId,
     required this.totalTraining,
     required this.remainingTraining,
+    required this.visitionDate,
     required this.createdAt,
     required this.updatedAt,
   });

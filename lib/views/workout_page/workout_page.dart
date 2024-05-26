@@ -9,7 +9,8 @@ class WorkoutPage extends StatelessWidget {
   const WorkoutPage({super.key, required this.data});
 
   Future<DateTime?> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(context: context, firstDate: DateTime.now(), lastDate: DateTime(2101));
+    final DateTime? picked = await showDatePicker(
+        context: context, firstDate: DateTime.now(), lastDate: DateTime(2101));
     return picked;
   }
 
@@ -72,34 +73,35 @@ class WorkoutPage extends StatelessWidget {
                   style: const TextStyle(fontSize: 16)),
             ),
             const SizedBox(height: 16), // отступ между кнопками
-          Center(
-            child: Container(
-              width: 265.0,
-              height: 35.0,
-              decoration: BoxDecoration(
-                color: kPrimaryColor, // пример цвета фона для кнопки
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: TextButton(
-                onPressed: () async {
-                  int _selectedIndex = 1;
-                  final DateTime? pickedDate = await _selectDate(context);
-                  final args = {
-                  'selectedIndex': _selectedIndex,
-                  'selectedDate': pickedDate,
-                  };    
-                  if (pickedDate != null) {
-                    Navigator.of(context).pushNamed(Routes.schedule, arguments: args);
-                  }
-                },
-                child: const Text(
-                  'Записаться',
-                  style: TextStyle(color: Colors.white),
+            Center(
+              child: Container(
+                width: 265.0,
+                height: 35.0,
+                decoration: BoxDecoration(
+                  color: kPrimaryColor, // пример цвета фона для кнопки
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: TextButton(
+                  onPressed: () async {
+                    int _selectedIndex = 1;
+                    final DateTime? pickedDate = await _selectDate(context);
+                    final args = {
+                      'selectedIndex': _selectedIndex,
+                      'selectedDate': pickedDate,
+                    };
+                    if (pickedDate != null) {
+                      Navigator.of(context)
+                          .pushNamed(Routes.schedule, arguments: args);
+                    }
+                  },
+                  child: const Text(
+                    'Записаться',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 16), 
+            const SizedBox(height: 16),
           ],
         ),
       ),

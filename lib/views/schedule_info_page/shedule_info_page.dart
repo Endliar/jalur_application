@@ -6,7 +6,6 @@ import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/models/schedule.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import '../../helpers/colors.dart';
 import '../../helpers/routes.dart';
