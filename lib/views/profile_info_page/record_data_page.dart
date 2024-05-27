@@ -24,7 +24,7 @@ class _RecordDataPageState extends State<RecordDataPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         backgroundColor: kSecondaryColor,
         title: const Text(
           "История записей",
