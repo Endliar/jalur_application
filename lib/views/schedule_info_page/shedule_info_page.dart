@@ -108,6 +108,7 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                       subtitle: Text(state.schedules[index].typeName),
                       trailing: ElevatedButton(
                           onPressed: () async {
+                            BuildContext dialogContext = context;
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             final userId = prefs.getInt('user_id');
@@ -123,59 +124,64 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                               ];
                               int totalTraining = 0;
                               String typeRecord = typesList.first;
-                              await showDialog(
-                                context: context,
-                                builder: (BuildContext dialogContext) {
-                                  return AlertDialog(
-                                    title: Text("Дополнительная информация"),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        CustomTextField(onChanged: (value) {
-                                          totalTraining = int.parse(value);
-                                        }),
-                                        SizedBox(height: 8.0),
-                                        CustomDropdownButton(
-                                            value: typeRecord,
-                                            items: typesList,
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                typeRecord = newValue!;
-                                              });
-                                            })
+                              if (dialogContext.mounted) {
+                                await showDialog(
+                                  context: dialogContext,
+                                  builder: (BuildContext dialogContext) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                          "Дополнительная информация"),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CustomTextField(onChanged: (value) {
+                                            totalTraining = int.parse(value);
+                                          }),
+                                          const SizedBox(height: 8.0),
+                                          CustomDropdownButton(
+                                              value: typeRecord,
+                                              items: typesList,
+                                              onChanged: (newValue) {
+                                                setState(() {
+                                                  typeRecord = newValue!;
+                                                });
+                                              })
+                                        ],
+                                      ),
+                                      actions: [
+                                        Center(
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(dialogContext)
+                                                    .pop();
+                                                if (totalTraining != null &&
+                                                    typeRecord != null) {
+                                                  BlocProvider.of<
+                                                              ScheduleDataBloc>(
+                                                          context)
+                                                      .add(CreateRecordEvent(
+                                                          scheduleId: state
+                                                              .schedules[index]
+                                                              .id,
+                                                          userId: userId,
+                                                          totalTraining:
+                                                              totalTraining,
+                                                          hallId: state
+                                                              .schedules[index]
+                                                              .hallId,
+                                                          typeRecord:
+                                                              typeRecord,
+                                                          visitionDate:
+                                                              formattedDate));
+                                                }
+                                              },
+                                              child: const Text('Ок')),
+                                        )
                                       ],
-                                    ),
-                                    actions: [
-                                      Center(
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.of(dialogContext).pop();
-                                              if (totalTraining != null &&
-                                                  typeRecord != null) {
-                                                BlocProvider.of<
-                                                            ScheduleDataBloc>(
-                                                        context)
-                                                    .add(CreateRecordEvent(
-                                                        scheduleId: state
-                                                            .schedules[index]
-                                                            .id,
-                                                        userId: userId,
-                                                        totalTraining:
-                                                            totalTraining,
-                                                        hallId: state
-                                                            .schedules[index]
-                                                            .hallId,
-                                                        typeRecord: typeRecord,
-                                                        visitionDate:
-                                                            formattedDate));
-                                              }
-                                            },
-                                            child: Text('Ок')),
-                                      )
-                                    ],
-                                  );
-                                },
-                              );
+                                    );
+                                  },
+                                );
+                              }
                             }
                           },
                           child: const Text("Записаться"))),
