@@ -30,6 +30,7 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
 
         if (isSuccess) {
           emit(RecordCreationSuccessState());
+          add(LoadScheduleDataEvent());
         } else {
           emit(RecordCreationFailureState("Не удалось создать запись"));
         }
@@ -54,6 +55,7 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
       }
       emit(LoadScheduleDataSuccess(schedules));
     } catch (e) {
+      print(e);
       emit(ScheduleErrorState(e.toString()));
     }
   }

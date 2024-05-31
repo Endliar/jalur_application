@@ -10,7 +10,7 @@ class GetRecordEvent extends RecordDataEvent {
   final int scheduleId;
   final int totalTraining;
   final int remainingTraining;
-  final VisitionDate visitionDate;
+  final List<VisitionDate> visitionDates;
   final String createdAt;
   final String updatedAt;
 
@@ -20,7 +20,7 @@ class GetRecordEvent extends RecordDataEvent {
     required this.scheduleId,
     required this.totalTraining,
     required this.remainingTraining,
-    required this.visitionDate,
+    required this.visitionDates,
     required this.createdAt,
     required this.updatedAt,
   });

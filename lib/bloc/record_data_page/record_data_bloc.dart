@@ -17,8 +17,12 @@ class RecordDataBloc extends Bloc<RecordDataEvent, RecordDataState> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final userId = prefs.getInt('user_id');
-      final records = await getRecordApi.getUserRecords(userId!);
-      emit(LoadRecordDataSuccess(records));
+      if (userId != null) {
+        final records = await getRecordApi.getUserRecords(userId!);
+        emit(LoadRecordDataSuccess(records));
+      } else {
+        emit(RecordErrorState('User ID not found'));
+      }
     } catch (e) {
       emit(RecordErrorState(e.toString()));
     }

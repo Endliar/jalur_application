@@ -114,7 +114,6 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
                             final userId = prefs.getInt('user_id');
                             final DateTime? pickedDate =
                                 await _pickDate(context);
-
                             if (pickedDate != null) {
                               String formattedDate =
                                   DateFormat('MM.dd.yyyy').format(pickedDate);
@@ -190,6 +189,20 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
             );
           } else if (state is ScheduleErrorState) {
             return Center(child: Text('Error: ${state.error}'));
+          } else if (state is RecordCreationSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Запись успешно создана!")));
+            BlocProvider.of<ScheduleDataBloc>(context)
+                .add(LoadScheduleDataEvent());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is RecordCreationFailureState) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Ошибка: ${state.error}')));
+            });
+            return Center(child: Text('Ошибка: ${state.error}'));
           } else {
             return const Center(
               child: Text('Нет данных о записях'),

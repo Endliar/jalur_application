@@ -106,10 +106,11 @@ class Routes {
                   return Center(
                     child: Text('Ошибка: ${state.error}'),
                   );
+                } else {
+                  return const Center(
+                    child: Text('Данные о расписании не загружены'),
+                  );
                 }
-                return const Center(
-                  child: Text('Данные о расписании не загружены'),
-                );
               },
             ),
           ),

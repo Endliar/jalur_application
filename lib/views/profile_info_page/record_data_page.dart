@@ -43,21 +43,30 @@ class _RecordDataPageState extends State<RecordDataPage> {
                 final record = state.records[index];
                 return Card(
                   margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    isThreeLine: true,
+                  child: ExpansionTile(
                     title: Text('Запись №${record.id}'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            'Дата записи: ${record.visitionDate?.visitionDate ?? "Не указана"}'),
-                        Text('Количество тренировок: ${record.totalTraining}'),
-                        Text(
-                            'Статус: ${record.visitionDate?.status ?? "Отсутствует"}'),
-                      ],
-                    ),
                     trailing: TextButton(
                         onPressed: () {}, child: const Text('Отменить')),
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Общее количество тренировок: ${record.totalTraining}'),
+                          Text(
+                              'Оставшееся количество тренировок: ${record.remainingTraining}'),
+                          ...record.visitionDates?.map((visitionDate) {
+                                return ListTile(
+                                  title: Text(
+                                      'Дата посещения: ${visitionDate.visitionDate}'),
+                                  subtitle:
+                                      Text('Статус: ${visitionDate.status}'),
+                                );
+                              }).toList() ??
+                              [const Text('Даты посещений отсутствуют')],
+                        ],
+                      ),
+                    ],
                   ),
                 );
               },
