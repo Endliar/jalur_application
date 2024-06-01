@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/recoil_data/recoil_bloc.dart';
 import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
 import 'package:jalur/response_api/get_record.dart';
 import 'package:jalur/response_api/user_logout.dart';
@@ -134,9 +135,16 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BlocProvider<RecordDataBloc>(
-                      create: (context) =>
-                          RecordDataBloc(getRecordApi: GetRecordApi()),
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider<RecordDataBloc>(
+                          create: (context) =>
+                              RecordDataBloc(getRecordApi: GetRecordApi()),
+                        ),
+                        BlocProvider<RecoilBloc>(
+                          create: (context) => RecoilBloc(),
+                        ),
+                      ],
                       child: const RecordDataPage(),
                     ),
                   ));

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/recoil_data/recoil_bloc.dart';
+import 'package:jalur/bloc/recoil_data/recoil_event.dart';
 import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
 import 'package:jalur/bloc/record_data_page/record_data_event.dart';
 import 'package:jalur/bloc/record_data_page/record_data_state.dart';
@@ -45,8 +47,6 @@ class _RecordDataPageState extends State<RecordDataPage> {
                   margin: const EdgeInsets.all(8.0),
                   child: ExpansionTile(
                     title: Text('Запись №${record.id}'),
-                    trailing: TextButton(
-                        onPressed: () {}, child: const Text('Отменить')),
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,6 +61,19 @@ class _RecordDataPageState extends State<RecordDataPage> {
                                       'Дата посещения: ${visitionDate.visitionDate}'),
                                   subtitle:
                                       Text('Статус: ${visitionDate.status}'),
+                                  trailing: TextButton(
+                                    onPressed: () {
+                                      BlocProvider.of<RecoilBloc>(context).add(
+                                          RecoilCreateEvent(
+                                              id: record.id,
+                                              userId: record.userId,
+                                              recoilTraining:
+                                                  record.remainingTraining,
+                                              scheduleDay:
+                                                  visitionDate.visitionDate));
+                                    },
+                                    child: const Text('Отменить'),
+                                  ),
                                 );
                               }).toList() ??
                               [const Text('Даты посещений отсутствуют')],
