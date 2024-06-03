@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:jalur/bloc/recoil_data/recoil_bloc.dart';
 import 'package:jalur/bloc/recoil_data/recoil_event.dart';
 import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
@@ -53,8 +54,6 @@ class _RecordDataPageState extends State<RecordDataPage> {
                         children: [
                           Text(
                               'Общее количество тренировок: ${record.totalTraining}'),
-                          Text(
-                              'Оставшееся количество тренировок: ${record.remainingTraining}'),
                           ...record.visitionDates?.map((visitionDate) {
                                 return ListTile(
                                   title: Text(
@@ -63,14 +62,19 @@ class _RecordDataPageState extends State<RecordDataPage> {
                                       Text('Статус: ${visitionDate.status}'),
                                   trailing: TextButton(
                                     onPressed: () {
+                                      DateTime parsedDate =
+                                          DateFormat('yyyy-dd-MM')
+                                              .parse(visitionDate.visitionDate);
+                                      String formattedDate =
+                                          DateFormat('yyyy-dd-MM')
+                                              .format(parsedDate);
                                       BlocProvider.of<RecoilBloc>(context).add(
                                           RecoilCreateEvent(
                                               id: record.id,
                                               userId: record.userId,
                                               recoilTraining:
-                                                  record.remainingTraining,
-                                              scheduleDay:
-                                                  visitionDate.visitionDate));
+                                                  record.totalTraining,
+                                              scheduleDay: formattedDate));
                                     },
                                     child: const Text('Отменить'),
                                   ),

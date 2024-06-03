@@ -12,14 +12,15 @@ Future<void> createRecoilRecord(
     'id': id,
     'user_id': userId,
     'recoil_training': recoilTraining,
-    'schedule_day': scheduleDay
+    'schedule_day': scheduleDay,
+    'payments': ''
   };
 
   final response = await http.post(
-    Uri.parse("http://89.104.69.88/api/record/recoil"),
+    Uri.parse('http://89.104.69.88/api/record/recoil'),
     headers: {
-      'Content-type': 'application/json',
       'Authorization': 'Bearer $authToken',
+      "Content-type": "application/json"
     },
     body: jsonEncode(requestBody),
   );

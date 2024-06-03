@@ -20,7 +20,7 @@ class ApiServiceCreateRecord {
       url,
       headers: {
         'Authorization': 'Bearer $authToken',
-        'Content-Type': 'application/json',
+        "Content-type": "application/json"
       },
       body: jsonEncode({
         'schedule_id': scheduleId,
@@ -34,7 +34,6 @@ class ApiServiceCreateRecord {
     if (response.statusCode == 201) {
       return true;
     } else {
-      // логируем ошибку, потому как на практике нам важно знать детали
       print('Ошибка создания записи: ${response.body}');
       return false;
     }
