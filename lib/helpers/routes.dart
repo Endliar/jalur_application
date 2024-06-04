@@ -81,9 +81,10 @@ class Routes {
               )),
         );
       case schedule:
-        final args = settings.arguments as Map;
+        final args = settings.arguments as Map<String, dynamic>;
         final int pageIndex = args['selectedIndex'] as int;
         final DateTime selectedDate = args['selectedDate'] as DateTime;
+
         return MaterialPageRoute(
           builder: (context) => BlocProvider<ScheduleDataBloc>(
             create: (context) => ScheduleDataBloc(
@@ -91,27 +92,10 @@ class Routes {
                 ApiServiceGetWorkoutDetail(),
                 GetTypeWorkout(),
                 ApiServiceCreateRecord())
-              ..add(LoadScheduleDataEvent()),
-            child: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
-              builder: (context, state) {
-                if (state is LoadingScheduleDataState) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is LoadScheduleDataSuccess) {
-                  return SheduleInfoPage(
-                    schedules: state.schedules,
-                    selectedIndex: pageIndex,
-                    selectedDate: selectedDate,
-                  );
-                } else if (state is ScheduleErrorState) {
-                  return Center(
-                    child: Text('Ошибка: ${state.error}'),
-                  );
-                } else {
-                  return const Center(
-                    child: Text('Данные о расписании не загружены'),
-                  );
-                }
-              },
+              ..add(LoadScheduleDataEvent()), // загружаем данные здесь
+            child: SheduleInfoPage(
+              selectedIndex: pageIndex,
+              selectedDate: selectedDate,
             ),
           ),
         );

@@ -63,10 +63,10 @@ class _RecordDataPageState extends State<RecordDataPage> {
                                   trailing: TextButton(
                                     onPressed: () {
                                       DateTime parsedDate =
-                                          DateFormat('yyyy-dd-MM')
+                                          DateFormat('yyyy-MM-dd')
                                               .parse(visitionDate.visitionDate);
                                       String formattedDate =
-                                          DateFormat('yyyy-dd-MM')
+                                          DateFormat('yyyy-MM-dd')
                                               .format(parsedDate);
                                       BlocProvider.of<RecoilBloc>(context).add(
                                           RecoilCreateEvent(

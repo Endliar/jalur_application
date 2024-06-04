@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/response_api/create_record.dart';
 import 'package:jalur/response_api/get_type_workout.dart';
@@ -14,30 +16,45 @@ class ScheduleDataBloc extends Bloc<ScheduleDataEvent, ScheduleDataState> {
   final ApiServiceGetWorkoutDetail getWorkoutDetail;
   final ApiServiceCreateRecord apiServiceCreateRecord;
 
+  final StreamController<RecordCreationState> _streamController =
+      StreamController<RecordCreationState>();
+
   ScheduleDataBloc(this.getScheduleData, this.getWorkoutDetail,
       this.getTypeWorkout, this.apiServiceCreateRecord)
       : super(InitialState()) {
     on<LoadScheduleDataEvent>(_onLoadScheduleDataEvent);
-    on<CreateRecordEvent>((event, emit) async {
-      try {
-        final bool isSuccess = await apiServiceCreateRecord.createRecord(
-            scheduleId: event.scheduleId,
-            userId: event.userId,
-            totalTraining: event.totalTraining,
-            hallId: event.hallId,
-            typeRecord: event.typeRecord,
-            visitionDate: event.visitionDate);
+    on<CreateRecordEvent>(_createRecord);
+  }
 
-        if (isSuccess) {
-          emit(RecordCreationSuccessState());
-          add(LoadScheduleDataEvent());
-        } else {
-          emit(RecordCreationFailureState("Не удалось создать запись"));
-        }
-      } catch (e) {
-        emit(RecordCreationFailureState(e.toString()));
+  Stream<RecordCreationState> get recordCreationStream =>
+      _streamController.stream;
+
+  Future<void> _createRecord(
+      CreateRecordEvent event, Emitter<ScheduleDataState> emit) async {
+    try {
+      final bool isSuccess = await apiServiceCreateRecord.createRecord(
+          scheduleId: event.scheduleId,
+          userId: event.userId,
+          totalTraining: event.totalTraining,
+          hallId: event.hallId,
+          typeRecord: event.typeRecord,
+          visitionDate: event.visitionDate);
+
+      if (isSuccess) {
+        _streamController.add(RecordCreationSuccessState());
+      } else {
+        _streamController
+            .add(RecordCreationFailureState("Не удалось создать запись"));
       }
-    });
+    } catch (e) {
+      _streamController.add(RecordCreationFailureState(e.toString()));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _streamController.close();
+    return super.close();
   }
 
   Future<void> _onLoadScheduleDataEvent(

@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
-import 'package:jalur/models/schedule.dart';
 import 'package:jalur/widgets/custom_dropdown_button.dart';
 import 'package:jalur/widgets/custom_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,13 +15,9 @@ import '../../helpers/routes.dart';
 
 class SheduleInfoPage extends StatefulWidget {
   final DateTime selectedDate;
-  final List<Schedule> schedules;
   final int selectedIndex;
   const SheduleInfoPage(
-      {super.key,
-      required this.schedules,
-      required this.selectedIndex,
-      required this.selectedDate});
+      {super.key, required this.selectedIndex, required this.selectedDate});
 
   @override
   State<SheduleInfoPage> createState() => _SheduleInfoPageState();
@@ -30,11 +27,32 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
   int _selectedIndex = 0;
   DateTime _selectedDate = DateTime.now();
 
+  late StreamSubscription<RecordCreationState> _subscription;
+  late Stream<RecordCreationState> _recordCreationStream;
+
   @override
   void initState() {
     super.initState();
+    _recordCreationStream =
+        BlocProvider.of<ScheduleDataBloc>(context).recordCreationStream;
+    _subscription = _recordCreationStream.listen((state) {
+      if (state is RecordCreationSuccessState) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Запись успешно создана!")));
+        BlocProvider.of<ScheduleDataBloc>(context).add(LoadScheduleDataEvent());
+      } else if (state is RecordCreationFailureState) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Ошибка: ${state.error}')));
+      }
+    });
     _selectedIndex = widget.selectedIndex;
     _selectedDate = widget.selectedDate;
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   void _onItemTapped(int index) {
@@ -76,8 +94,6 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
 
     return pickedDate;
   }
-
-  // Здесь надо заебашить как в homepage'е
 
   @override
   Widget build(BuildContext context) {
@@ -189,20 +205,6 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
             );
           } else if (state is ScheduleErrorState) {
             return Center(child: Text('Error: ${state.error}'));
-          } else if (state is RecordCreationSuccessState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Запись успешно создана!")));
-            BlocProvider.of<ScheduleDataBloc>(context)
-                .add(LoadScheduleDataEvent());
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is RecordCreationFailureState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Ошибка: ${state.error}')));
-            });
-            return Center(child: Text('Ошибка: ${state.error}'));
           } else {
             return const Center(
               child: Text('Нет данных о записях'),
