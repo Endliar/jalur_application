@@ -10,6 +10,7 @@ class PhoneNumberInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textAlign: TextAlign.center,
       controller: controller,
       inputFormatters: [formatter],
       decoration: const InputDecoration(hintText: "Введите номер телефона"),

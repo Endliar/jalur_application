@@ -1,3 +1,3 @@
 abstract class HomepageEvent {}
 
-class LoadUserEvent extends HomepageEvent {}
+class LoadWorkoutEvent extends HomepageEvent {}

@@ -1,4 +1,4 @@
-package com.example.jalur
+package com.matuskina.jalur
 
 import io.flutter.embedding.android.FlutterActivity
 

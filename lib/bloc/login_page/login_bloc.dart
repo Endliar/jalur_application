@@ -11,7 +11,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.phoneNumber != null && event.phoneNumber!.isNotEmpty) {
         try {
           emit(LoginLoadingState());
-          bool requestCodeSent = await loginRepo.requestCode(event.phoneNumber!);
+          bool requestCodeSent =
+              await loginRepo.requestCode(event.phoneNumber!);
           if (requestCodeSent) {
             emit(CodeSentState());
           } else {
@@ -28,7 +29,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.smsCode != null && event.smsCode!.isNotEmpty) {
         try {
           emit(LoginLoadingState());
-          bool isAuth = await loginRepo.authUser(event.phoneNumber!, event.smsCode!);
+          bool isAuth =
+              await loginRepo.authUser(event.phoneNumber!, event.smsCode!);
           if (isAuth == true) {
             emit(LoginSuccessState());
           } else {

@@ -8,6 +8,7 @@ class VerificationCodeInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textAlign: TextAlign.center,
       controller: controller,
       decoration: const InputDecoration(hintText: "Введите код"),
     );

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jalur/bloc/home_page/homepage_bloc.dart';
+import 'package:jalur/bloc/home_page/homepage_event.dart';
+import 'package:jalur/bloc/home_page/homepage_state.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/login_page/login_event.dart';
 import 'package:jalur/bloc/login_page/login_state.dart';
-import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/response_api/auth_user.dart';
+import 'package:jalur/response_api/get_type_workout.dart';
+import 'package:jalur/response_api/get_workout.dart';
+import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/login/components/phone_number_input.dart';
 import 'package:jalur/views/login/components/verification_code_input.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -51,18 +56,20 @@ class _LoginPageState extends State<LoginPage> {
     if (_phoneInputFormatter.isFill()) {
       try {
         context.read<LoginBloc>().add(SendVerificationCodeEvent(phoneNumber));
-        final requestCodeSuccess = await context.read<Login>().requestCode(phoneNumber);
+        final requestCodeSuccess =
+            await context.read<Login>().requestCode(phoneNumber);
         if (requestCodeSuccess) {
           setState(() {
             _sendCode = true;
           });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Ошибка отправки кода верификации")),
+            const SnackBar(content: Text("Ошибка отправки кода верификации")),
           );
         }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ошибка: $e")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Ошибка: $e")));
       }
     }
   }
@@ -70,7 +77,9 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     final smsCode = _smsCodeController.text;
     if (smsCode.isNotEmpty) {
-      context.read<LoginBloc>().add(LoginWithCodeEvent(_phoneController.text, smsCode));
+      context
+          .read<LoginBloc>()
+          .add(LoginWithCodeEvent(_phoneController.text, smsCode));
     }
   }
 
@@ -91,7 +100,31 @@ class _LoginPageState extends State<LoginPage> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.error)));
             } else if (state is LoginSuccessState) {
-              Navigator.pushNamed(context, Routes.homepage);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomepageBloc>(
+                      create: (context) =>
+                          HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                            ..add(LoadWorkoutEvent()),
+                      child: BlocBuilder<HomepageBloc, HomepageState>(
+                        builder: (context, state) {
+                          if (state is LoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (state is HomepageLoadWorkoutSuccess) {
+                            return Homepage(workouts: state.workouts);
+                          } else if (state is HomepageErrorState) {
+                            return Center(child: Text('Error: ${state.error}'));
+                          }
+                          return const Center(
+                            child: Text('Данные не загружены'),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  (Route<dynamic> route) => false);
             }
           },
           child: BlocBuilder<LoginBloc, LoginState>(
@@ -101,7 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    PhoneNumberInput(controller: _phoneController, formatter: _phoneInputFormatter),
+                    PhoneNumberInput(
+                        controller: _phoneController,
+                        formatter: _phoneInputFormatter),
                     SizedBox(
                       height: getProportionateScreenHeight(16.0),
                     ),
