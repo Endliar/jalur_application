@@ -7,7 +7,7 @@ class UserDataUpdate {
       {required int? id, String? phone, String? weight}) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    var url = Uri.parse('http://89.104.69.88/api/user/update');
+    var url = Uri.parse('http://194.58.126.46/api/user/update');
 
     final body = jsonEncode({'id': id, 'phone': phone});
 

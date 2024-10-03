@@ -9,7 +9,7 @@ class GetRecordApi {
   Future<List<Record>> getUserRecords(int userId) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    final url = Uri.parse('http://89.104.69.88/api/record/$userId');
+    final url = Uri.parse('http://194.58.126.46/api/record/$userId');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });

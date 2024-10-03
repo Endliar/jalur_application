@@ -11,7 +11,7 @@ class ApiServiceGetSchedule {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     final String? authToken = sharedPreferences.getString('auth_token');
-    final url = Uri.parse('http://89.104.69.88/api/schedule/');
+    final url = Uri.parse('http://194.58.126.46/api/schedule/');
     final response =
         await http.get(url, headers: {'Authorization': 'Bearer $authToken'});
     if (response.statusCode == 200) {

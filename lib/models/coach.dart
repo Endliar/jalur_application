@@ -4,7 +4,7 @@ class Coach {
   final String lastName;
   final String? middleName;
   final int? age;
-  final String description;
+  final String? description;
   final String role;
   final String gender;
   final String? image;

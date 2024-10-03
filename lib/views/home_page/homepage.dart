@@ -83,7 +83,7 @@ class _HomepageState extends State<Homepage> {
                             topLeft: Radius.circular(10.0),
                             topRight: Radius.circular(10.0)),
                         child: Image.network(
-                          'http://89.104.69.88/storage/${state.workouts[index].images}',
+                          'http://194.58.126.46/storage/${state.workouts[index].images}',
                           width: double.infinity,
                           height: 150.0,
                           fit: BoxFit.cover,

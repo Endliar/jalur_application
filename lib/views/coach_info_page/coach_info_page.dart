@@ -39,7 +39,7 @@ class _CoachInfoPageState extends State<CoachInfoPage> {
       final args = {
         'selectedIndex': _selectedIndex,
         'selectedDate': pickedDate,
-        };
+      };
 
       switch (index) {
         case 0:
@@ -100,7 +100,7 @@ class _CoachInfoPageState extends State<CoachInfoPage> {
                         image: DecorationImage(
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                                'http://89.104.69.88/storage/${widget.coaches[index].image}'))),
+                                'http://194.58.126.46/storage/${widget.coaches[index].image}'))),
                   ),
                   Expanded(
                       child: Column(

@@ -8,7 +8,7 @@ class GetUserData {
   Future<List<Coach>> getUserData(int? id) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    var url = Uri.parse('http://89.104.69.88/api/user/show/$id');
+    var url = Uri.parse('http://194.58.126.46/api/user/show/$id');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });

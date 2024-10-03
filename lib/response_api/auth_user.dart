@@ -17,7 +17,7 @@ class Login {
   }
 
   Future<bool> authUser(String phone, String code) async {
-    var url = Uri.parse("http://89.104.69.88/api/user/auth");
+    var url = Uri.parse("http://194.58.126.46/api/user/auth");
     final response = await http.post(url,
         headers: {
           "accept": "application/json",
@@ -41,7 +41,7 @@ class Login {
   }
 
   Future<bool> requestCode(String phoneNumber) async {
-    var url = Uri.parse("http://89.104.69.88/api/user/code/$phoneNumber");
+    var url = Uri.parse("http://194.58.126.46/api/user/code/$phoneNumber");
     final response = await http.get(url, headers: {
       "accept": "application/json",
       "Content-type": "application/json"

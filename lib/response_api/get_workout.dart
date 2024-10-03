@@ -11,7 +11,7 @@ class ApiServiceGetWorkout {
   Future<List<Workout>> getWorkouts() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    final url = Uri.parse('http://89.104.69.88/api/workout/');
+    final url = Uri.parse('http://194.58.126.46/api/workout/');
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });
