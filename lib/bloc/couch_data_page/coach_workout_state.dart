@@ -14,5 +14,6 @@ class LoadCoachDataSuccess extends CoachDataState {
 
 class CoachErrorState extends CoachDataState {
   final String error;
+
   CoachErrorState(this.error);
 }

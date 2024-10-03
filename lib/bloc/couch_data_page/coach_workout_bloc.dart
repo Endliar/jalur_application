@@ -7,6 +7,7 @@ import 'coach_workout_state.dart';
 
 class CoachDataBloc extends Bloc<CoachDataEvent, CoachDataState> {
   final GetCoachData getCoachData;
+
   CoachDataBloc(this.getCoachData) : super(InitialState()) {
     on<LoadCoachDataEvent>(_onLoadCoachDataEvent);
     on<CoachDetailButtonPressed>(_onCoachDetailButtonPressed);
@@ -14,8 +15,8 @@ class CoachDataBloc extends Bloc<CoachDataEvent, CoachDataState> {
 
   Future<void> _onLoadCoachDataEvent(
       LoadCoachDataEvent event, Emitter<CoachDataState> emit) async {
+    emit(LoadingCoachDataState());
     try {
-      emit(LoadingCoachDataState());
       List<Coach> coaches = await getCoachData.getCoachesData();
       emit(LoadCoachDataSuccess(coaches));
     } catch (e) {
@@ -25,8 +26,8 @@ class CoachDataBloc extends Bloc<CoachDataEvent, CoachDataState> {
 
   Future<void> _onCoachDetailButtonPressed(
       CoachDetailButtonPressed event, Emitter<CoachDataState> emit) async {
+    emit(LoadingCoachDataState());
     try {
-      emit(LoadingCoachDataState());
       final Coach coach = await getCoachData.getUserData(event.coachId);
       emit(LoadCoachDataSuccess([coach]));
     } catch (e) {

@@ -8,7 +8,8 @@ class GetCoachData {
   Future<List<Coach>> getCoachesData() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    var url = Uri.parse("http://194.58.126.46/api/user/show/role/Тренер");
+    final Uri url = Uri.parse('http://194.58.126.46/api/user/show/role/Тренер');
+
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });
@@ -26,7 +27,8 @@ class GetCoachData {
   Future<Coach> getUserData(int? id) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    var url = Uri.parse('http://194.58.126.46/api/user/show/$id');
+    final Uri url = Uri.parse('http://194.58.126.46/api/user/show/$id');
+
     final response = await http.get(url, headers: {
       'Authorization': 'Bearer $authToken',
     });
