@@ -14,5 +14,6 @@ class HomepageLoadWorkoutSuccess extends HomepageState {
 
 class HomepageErrorState extends HomepageState {
   final String error;
+
   HomepageErrorState(this.error);
 }

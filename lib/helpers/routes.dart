@@ -10,7 +10,6 @@ import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
-import 'package:jalur/bloc/schedule_data_page/schedule_data_state.dart';
 import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/response_api/create_record.dart';
 import 'package:jalur/response_api/create_user.dart';
