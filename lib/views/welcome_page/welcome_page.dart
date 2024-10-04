@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jalur/helpers/routes.dart';
-import 'package:jalur/views/welcome_page/components/default_navigator_button.dart';
 import 'package:jalur/views/welcome_page/components/login_button.dart';
 import 'package:jalur/views/welcome_page/components/sign_up_button.dart';
 

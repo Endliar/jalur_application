@@ -4,6 +4,7 @@ import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_event.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/views/registration/components/gender_text_field.dart';
+import 'package:jalur/views/registration/components/success_dialog.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../helpers/colors.dart';
@@ -46,6 +47,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _surnameController.dispose();
+    _ageController.dispose();
+    _phoneController.dispose();
+    _genderController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -60,20 +71,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           listener: (context, state) {
             if (state is RegistrationSuccess) {
               showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                        title: const Center(
-                          child: Text(
-                            "Регистрация успешна",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Center(child: Text("Ок")))
-                        ],
-                      ));
+                context: context,
+                builder: (context) => const SuccessDialog(),
+              );
             }
             if (state is RegistrationFailure) {
               ScaffoldMessenger.of(context)
@@ -108,7 +108,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         height: getProportionateScreenHeight(10.0),
                       ),
                       headerText("Укажите ваш пол"),
-                      genderTextField(context: context, controller: _genderController),
+                      genderTextField(
+                          context: context, controller: _genderController),
                       SizedBox(
                         height: getProportionateScreenHeight(10.0),
                       ),
