@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../../../helpers/colors.dart';
 import '../../../helpers/size_config.dart';
 
-class DefualtNavigatorButton extends StatelessWidget {
+class DefaultNavigatorButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  const DefualtNavigatorButton({
+  const DefaultNavigatorButton({
     Key? key,
     required this.onPressed,
     required this.text,
@@ -21,10 +21,20 @@ class DefualtNavigatorButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6)))),
+          backgroundColor: WidgetStateColor.resolveWith((states) {
+            if (states.contains(WidgetState.hovered) ||
+                states.contains(WidgetState.focused)) {
+              return kPrimaryColor.withOpacity(0.8);
+            }
+            return kPrimaryColor;
+          }),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+          mouseCursor: WidgetStateMouseCursor.clickable,
+        ),
         child: Text(
           text,
           style: const TextStyle(color: Colors.white),
