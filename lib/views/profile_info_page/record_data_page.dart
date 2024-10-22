@@ -20,22 +20,37 @@ class _RecordDataPageState extends State<RecordDataPage> {
   @override
   void initState() {
     super.initState();
-    context.read<RecordDataBloc>().add(LoadRecordDataEvent());
+    // Временное отключение функционала от 23.10.24 в связи с доработкой
+    // context.read<RecordDataBloc>().add(LoadRecordDataEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: kSecondaryColor,
-        title: const Text(
-          "История записей",
-          style: TextStyle(color: Colors.white),
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+          backgroundColor: kSecondaryColor,
+          title: const Text(
+            "История записей",
+            style: TextStyle(color: Colors.white),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: BlocBuilder<RecordDataBloc, RecordDataState>(
+        body: const Center(
+          child: Text(
+            "История записей находится на доработке!\n"
+            "Мы работаем над улучшением этого раздела.",
+            style: TextStyle(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+        ));
+  }
+}
+
+
+// Функционал показа историй записей
+/*
+BlocBuilder<RecordDataBloc, RecordDataState>(
         builder: (context, state) {
           if (state is LoadingRecordDataState) {
             return const Center(child: CircularProgressIndicator());
@@ -99,6 +114,4 @@ class _RecordDataPageState extends State<RecordDataPage> {
           }
         },
       ),
-    );
-  }
-}
+      */

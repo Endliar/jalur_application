@@ -69,6 +69,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            const Center(
+              child: Text(
+                'Здесь вы можете изменить некоторые свои данные.',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _phoneController,
               decoration: const InputDecoration(labelText: 'Телефон'),
