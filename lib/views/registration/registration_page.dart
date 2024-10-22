@@ -85,58 +85,57 @@ class _RegistrationPageState extends State<RegistrationPage> {
               if (state is RegistrationLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      headerText("Введите имя"),
-                      defaultTextField("Введите ваше имя", _nameController),
-                      SizedBox(
-                        height: getProportionateScreenHeight(10.0),
-                      ),
-                      headerText("Введите фамилию"),
-                      defaultTextField(
-                          "Введите вашу фамилию", _surnameController),
-                      SizedBox(
-                        height: getProportionateScreenHeight(10.0),
-                      ),
-                      headerText("Укажите ваш возраст"),
-                      defaultTextField("Сколько вам лет?", _ageController),
-                      SizedBox(
-                        height: getProportionateScreenHeight(10.0),
-                      ),
-                      headerText("Укажите ваш пол"),
-                      genderTextField(
-                          context: context, controller: _genderController),
-                      SizedBox(
-                        height: getProportionateScreenHeight(10.0),
-                      ),
-                      headerText("Введите номер телефона"),
-                      defaultTextField("Ваш номер телефона", _phoneController,
-                          maskFormatter: _phoneInputFormatter),
-                      SizedBox(
-                        height: getProportionateScreenHeight(15.0),
-                      ),
-                      ElevatedButton(
-                          onPressed: state is RegistrationLoading
-                              ? null
-                              : () {
-                                  BlocProvider.of<RegistrationBloc>(context)
-                                      .add(RegistrationSubmitted(
-                                          name: _nameController.text,
-                                          surname: _surnameController.text,
-                                          phone: _phoneController.text,
-                                          gender: _genderController.text,
-                                          role: 'Клиент',
-                                          age: int.tryParse(
-                                                  _ageController.text) ??
-                                              0));
-                                },
-                          child: const Text("Зарегистрироваться"))
-                    ],
-                  ),
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    headerText("Введите имя"),
+                    defaultTextField("Введите ваше имя", _nameController),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    headerText("Введите фамилию"),
+                    defaultTextField(
+                        "Введите вашу фамилию", _surnameController),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    headerText("Укажите ваш возраст"),
+                    defaultTextField("Сколько вам лет?", _ageController),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    headerText("Укажите ваш пол"),
+                    genderTextField(
+                        context: context, controller: _genderController),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    headerText("Введите номер телефона"),
+                    defaultTextField("Ваш номер телефона", _phoneController,
+                        maskFormatter: _phoneInputFormatter),
+                    SizedBox(
+                      height: getProportionateScreenHeight(15.0),
+                    ),
+                    ElevatedButton(
+                        onPressed: state is RegistrationLoading
+                            ? null
+                            : () {
+                                BlocProvider.of<RegistrationBloc>(context).add(
+                                    RegistrationSubmitted(
+                                        name: _nameController.text,
+                                        surname: _surnameController.text,
+                                        phone: _phoneController.text,
+                                        gender: _genderController.text,
+                                        role: 'Клиент',
+                                        age:
+                                            int.tryParse(_ageController.text) ??
+                                                0));
+                              },
+                        child: const Text("Зарегистрироваться"))
+                  ],
                 ),
               );
             },

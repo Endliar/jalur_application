@@ -97,8 +97,9 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginErrorState) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.error)));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content:
+                      Text("Не удалось авторизоваться. Перепроверьте данные")));
             } else if (state is LoginSuccessState) {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
@@ -132,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     PhoneNumberInput(
