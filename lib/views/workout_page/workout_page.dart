@@ -95,7 +95,7 @@ class WorkoutPage extends StatelessWidget {
                     }
                   },
                   child: const Text(
-                    'Записаться',
+                    'Перейти к расписанию',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
