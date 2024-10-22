@@ -4,6 +4,7 @@ import 'package:jalur/bloc/recoil_data/recoil_bloc.dart';
 import 'package:jalur/bloc/record_data_page/record_data_bloc.dart';
 import 'package:jalur/response_api/get_record.dart';
 import 'package:jalur/response_api/user_logout.dart';
+import 'package:jalur/views/profile_info_page/abonement_page.dart';
 import 'package:jalur/views/profile_info_page/edit_profile_page.dart';
 import 'package:jalur/views/profile_info_page/record_data_page.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
@@ -151,6 +152,28 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: const Text(
                   'История записей',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16), // добавим небольшой отступ между кнопками
+          Center(
+            child: Container(
+              width: 265.0,
+              height: 35.0,
+              decoration: BoxDecoration(
+                color:
+                    kPrimaryColor, // пример цвета фона для кнопки, замени на нужный
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AbonementPage()));
+                },
+                child: const Text(
+                  'Абонементы',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
