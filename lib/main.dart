@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jalur/adapters/workout_adapter.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
 import 'package:jalur/bloc/login_page/login_bloc.dart';
@@ -11,6 +13,7 @@ import 'package:jalur/response_api/get_type_workout.dart';
 import 'package:jalur/response_api/get_workout.dart';
 import 'package:jalur/views/home_page/homepage.dart';
 import 'package:jalur/views/welcome_page/welcome_page.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/home_page/homepage_event.dart';
@@ -19,6 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   final String? authToken = preferences.getString('auth_token');
+  await initHave();
   await initializeDateFormatting('ru_RU', null);
   runApp(
     RepositoryProvider(
@@ -30,6 +34,13 @@ void main() async {
       ),
     ),
   );
+}
+
+Future<void> initHave() async {
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(WorkoutAdapterAdapter());
+  await Hive.openBox<WorkoutAdapter>('workouts');
 }
 
 class MyApp extends StatelessWidget {

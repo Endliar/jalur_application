@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_event.dart';
+import 'package:jalur/helpers/routes.dart';
 import 'package:jalur/helpers/size_config.dart';
 import 'package:jalur/views/registration/components/gender_text_field.dart';
 import 'package:jalur/views/registration/components/success_dialog.dart';
@@ -73,7 +74,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               showDialog(
                 context: context,
                 builder: (context) => const SuccessDialog(),
-              );
+              ).then((_) {
+                Navigator.pushReplacementNamed(context, Routes.login);
+              });
             }
             if (state is RegistrationFailure) {
               ScaffoldMessenger.of(context)
