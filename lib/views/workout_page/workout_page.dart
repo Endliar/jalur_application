@@ -33,7 +33,7 @@ class WorkoutPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: Image.network(
-                  'http://194.58.126.46/storage/${data.images}',
+                  'http://176.113.83.11/storage/${data.images}',
                   fit: BoxFit.cover,
                 ),
               ),

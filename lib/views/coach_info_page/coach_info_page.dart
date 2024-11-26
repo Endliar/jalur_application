@@ -100,7 +100,7 @@ class _CoachInfoPageState extends State<CoachInfoPage> {
                         image: DecorationImage(
                             fit: BoxFit.fill,
                             image: NetworkImage(
-                                'http://194.58.126.46/storage/${widget.coaches[index].image}'))),
+                                'http://176.113.83.11/storage/${widget.coaches[index].image}'))),
                   ),
                   Expanded(
                       child: Column(

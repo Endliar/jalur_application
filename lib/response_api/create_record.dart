@@ -15,7 +15,7 @@ class ApiServiceCreateRecord {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     final String? authToken = sharedPreferences.getString('auth_token');
-    final url = Uri.parse('http://194.58.126.46/api/record/create');
+    final url = Uri.parse('http://176.113.83.11/api/record/create');
     final response = await http.post(
       url,
       headers: {

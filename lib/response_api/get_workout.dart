@@ -11,7 +11,7 @@ class ApiServiceGetWorkout {
   Future<List<Workout>> getWorkouts() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? authToken = preferences.getString('auth_token');
-    final Uri url = Uri.parse('http://194.58.126.46/api/workout/');
+    final Uri url = Uri.parse('http://176.113.83.11/api/workout/');
 
     final Box<WorkoutAdapter> workoutBox = Hive.box<WorkoutAdapter>('workouts');
     if (workoutBox.isNotEmpty) {

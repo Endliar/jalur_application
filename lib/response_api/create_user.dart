@@ -8,7 +8,7 @@ class User {
 
   Future<void> createUser(String name, String surname, String phone,
       String gender, String role, int age) async {
-    var url = Uri.parse("http://194.58.126.46/api/user/create");
+    var url = Uri.parse("http://176.113.83.11/api/user/create");
     final response = await http.post(url,
         headers: {
           "accept": "application/json",

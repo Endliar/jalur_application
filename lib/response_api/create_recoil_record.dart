@@ -17,7 +17,7 @@ Future<void> createRecoilRecord(
   };
 
   final response = await http.post(
-    Uri.parse('http://194.58.126.46/api/record/recoil'),
+    Uri.parse('http://176.113.83.11/api/record/recoil'),
     headers: {
       'Authorization': 'Bearer $authToken',
       "Content-type": "application/json"

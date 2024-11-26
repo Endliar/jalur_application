@@ -31,7 +31,7 @@ class CoachDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.network(
-                    'http://194.58.126.46/storage/${coach.image}',
+                    'http://176.113.83.11/storage/${coach.image}',
                     width: 200,
                     height: 300,
                     fit: BoxFit.cover,
