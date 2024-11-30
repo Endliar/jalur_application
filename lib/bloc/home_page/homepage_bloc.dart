@@ -22,24 +22,26 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     try {
       emit(LoadingState());
 
-      // Получаем все данные с сервера
-      final List<Workout> serverWorkouts =
-          await apiServiceGetWorkout.getWorkouts();
-
       // Проверяем кэш
       final Box<WorkoutAdapter> workoutBox =
           Hive.box<WorkoutAdapter>('workouts');
       final List<Workout> cachedWorkouts =
           workoutBox.values.map((adapter) => adapter.toWorkout()).toList();
 
+      if (cachedWorkouts.isNotEmpty) {
+        // Отображаем кэшированные данные
+        emit(HomepageLoadWorkoutSuccess(cachedWorkouts));
+      }
+
+      // Получаем все данные с сервера
+      final List<Workout> serverWorkouts =
+          await apiServiceGetWorkout.getWorkouts();
+
       if (cachedWorkouts.isEmpty ||
           await _isCacheOutdated(cachedWorkouts, serverWorkouts)) {
         // Кэш пустой или устарел, обновляем его
         await _updateCache(serverWorkouts);
         emit(HomepageLoadWorkoutSuccess(serverWorkouts));
-      } else {
-        // Используем кэшированные данные
-        emit(HomepageLoadWorkoutSuccess(cachedWorkouts));
       }
     } catch (e) {
       emit(HomepageErrorState(e.toString()));
@@ -48,11 +50,21 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
 
   Future<bool> _isCacheOutdated(
       List<Workout> cachedWorkouts, List<Workout> serverWorkouts) async {
-    // Здесь должна быть логика для сравнения кэшированных данных с данными сервера
-    // Возвращает true, если кэш устарел, и false в противном случае
-    // Например, можно сравнить даты изменения или хеши данных
-    // ...
-    return false; // это реальной логикой сравнения
+    final Map<int, Workout> cachedWorkoutMap = {
+      for (var workout in cachedWorkouts) workout.id: workout
+    };
+
+    for (var serverWorkout in serverWorkouts) {
+      final cachedWorkout = cachedWorkoutMap[serverWorkout.id];
+      if (cachedWorkout == null ||
+          DateTime.parse(cachedWorkout.updatedAt)
+              .isBefore(DateTime.parse(serverWorkout.updatedAt))) {
+        // тренировки устарели
+        return true;
+      }
+    }
+    // все тренировки актуальны
+    return false;
   }
 
   Future<void> _updateCache(List<Workout> workouts) async {

@@ -22,6 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   final String? authToken = preferences.getString('auth_token');
+  preferences.remove('phone');
   await initHave();
   await initializeDateFormatting('ru_RU', null);
   runApp(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
-import 'package:jalur/adapters/workout_adapter.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
 import 'package:jalur/helpers/colors.dart';
@@ -80,16 +78,9 @@ class _HomepageState extends State<Homepage> {
                 },
               );
             } else {
-              final List<Workout> cachedWorkouts = _getCachedWorkouts();
-
-              if (cachedWorkouts.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: cachedWorkouts.length,
-                  itemBuilder: (context, index) {
-                    return WorkoutCard(workout: cachedWorkouts[index]);
-                  },
-                );
-              }
+              return const Center(
+                child: Text('Нет данных о тренировках'),
+              );
             }
           } else if (state is HomepageErrorState) {
             return Center(child: Text('Error: ${state.error}'));
@@ -116,9 +107,4 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
-}
-
-List<Workout> _getCachedWorkouts() {
-  final Box<WorkoutAdapter> workoutBox = Hive.box<WorkoutAdapter>('workouts');
-  return workoutBox.values.map((adapter) => adapter.toWorkout()).toList();
 }
