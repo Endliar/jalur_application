@@ -86,7 +86,7 @@ class _HomepageState extends State<Homepage> {
             return Center(child: Text('Error: ${state.error}'));
           }
           return const Center(
-            child: Text('Нет данных о тренировках'),
+            child: Text('Данные не загружены'),
           );
         },
       ),

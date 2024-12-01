@@ -15,37 +15,40 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
   HomepageBloc(this.apiServiceGetWorkout, this.getTypeWorkout)
       : super(InitialState()) {
     on<LoadWorkoutEvent>(_onLoadWorkoutEvent);
+    on<ResetStateEvent>(_onResetStateEvent);
   }
 
   Future<void> _onLoadWorkoutEvent(
       LoadWorkoutEvent event, Emitter<HomepageState> emit) async {
+    emit(LoadingState());
     try {
-      emit(LoadingState());
-
-      // Проверяем кэш
       final Box<WorkoutAdapter> workoutBox =
           Hive.box<WorkoutAdapter>('workouts');
       final List<Workout> cachedWorkouts =
           workoutBox.values.map((adapter) => adapter.toWorkout()).toList();
 
       if (cachedWorkouts.isNotEmpty) {
-        // Отображаем кэшированные данные
         emit(HomepageLoadWorkoutSuccess(cachedWorkouts));
+        print("Cached workouts loaded");
       }
 
-      // Получаем все данные с сервера
       final List<Workout> serverWorkouts =
           await apiServiceGetWorkout.getWorkouts();
 
       if (cachedWorkouts.isEmpty ||
           await _isCacheOutdated(cachedWorkouts, serverWorkouts)) {
-        // Кэш пустой или устарел, обновляем его
         await _updateCache(serverWorkouts);
         emit(HomepageLoadWorkoutSuccess(serverWorkouts));
       }
     } catch (e) {
       emit(HomepageErrorState(e.toString()));
     }
+  }
+
+  Future<void> _onResetStateEvent(
+      ResetStateEvent event, Emitter<HomepageState> emit) async {
+    emit(InitialState());
+    add(LoadWorkoutEvent());
   }
 
   Future<bool> _isCacheOutdated(
@@ -74,8 +77,8 @@ class HomepageBloc extends Bloc<HomepageEvent, HomepageState> {
     }
 
     final Box<WorkoutAdapter> workoutBox = Hive.box<WorkoutAdapter>('workouts');
-    workoutBox.clear();
-    workoutBox
+    await workoutBox.clear();
+    await workoutBox
         .addAll(workouts.map((workout) => WorkoutAdapter.fromWorkout(workout)));
   }
 }

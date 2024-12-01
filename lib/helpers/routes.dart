@@ -59,26 +59,28 @@ class Routes {
       case homepage:
         return MaterialPageRoute(
           builder: (context) => BlocProvider<HomepageBloc>(
-              create: (context) =>
-                  HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
-                    ..add(LoadWorkoutEvent()),
-              child: BlocBuilder<HomepageBloc, HomepageState>(
-                builder: (context, state) {
-                  if (state is LoadingState) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (state is HomepageLoadWorkoutSuccess) {
-                    return Homepage(workouts: state.workouts);
-                  } else if (state is HomepageErrorState) {
-                    return Center(child: Text('Error: ${state.error}'));
-                  }
+            create: (context) =>
+                HomepageBloc(ApiServiceGetWorkout(), GetTypeWorkout())
+                  ..add(LoadWorkoutEvent()),
+            child: BlocBuilder<HomepageBloc, HomepageState>(
+              builder: (context, state) {
+                if (state is LoadingState) {
                   return const Center(
-                    child: Text('Данные не загружены'),
+                    child: CircularProgressIndicator(),
                   );
-                },
-              )),
+                } else if (state is HomepageLoadWorkoutSuccess) {
+                  return Homepage(workouts: state.workouts);
+                } else if (state is HomepageErrorState) {
+                  return Center(child: Text('Error: ${state.error}'));
+                }
+                return const Center(
+                  child: Text('Данные не загружены'),
+                );
+              },
+            ),
+          ),
         );
+
       case schedule:
         final args = settings.arguments as Map<String, dynamic>;
         final int pageIndex = args['selectedIndex'] as int;
