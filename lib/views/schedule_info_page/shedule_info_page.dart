@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/colors.dart';
 import '../../helpers/routes.dart';
+import '../../models/schedule.dart';
 
 class SheduleInfoPage extends StatefulWidget {
   final DateTime selectedDate;
@@ -110,133 +111,18 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
       body: BlocBuilder<ScheduleDataBloc, ScheduleDataState>(
         builder: (context, state) {
           if (state is LoadingScheduleDataState) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           } else if (state is LoadScheduleDataSuccess) {
             return ListView.builder(
               itemCount: state.schedules.length,
               itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                      title: Text(state.schedules[index].workoutName),
-                      subtitle: Text(state.schedules[index].typeName),
-                      trailing: ElevatedButton(
-                          onPressed: () async {
-                            BuildContext dialogContext = context;
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            final userId = prefs.getInt('user_id');
-                            final DateTime? pickedDate =
-                                await _pickDate(context);
-                            if (pickedDate != null) {
-                              String formattedDate =
-                                  DateFormat('MM.dd.yyyy').format(pickedDate);
-                              List<String> typesList = [
-                                'Тренировка в зале',
-                                'Глемпинг'
-                              ];
-                              bool hasSubscription = false;
-                              int totalTraining = 0;
-                              String typeRecord = typesList.first;
-                              if (dialogContext.mounted) {
-                                await showDialog(
-                                  context: dialogContext,
-                                  builder: (BuildContext dialogContext) {
-                                    return AlertDialog(
-                                      title: const Center(
-                                        child:
-                                            Text("Дополнительная информация"),
-                                      ),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          CustomTextField(onChanged: (value) {
-                                            totalTraining = int.parse(value);
-                                          }),
-                                          const SizedBox(height: 8.0),
-                                          CustomDropdownButton(
-                                              value: typeRecord,
-                                              items: typesList,
-                                              onChanged: (newValue) {
-                                                setState(() {
-                                                  typeRecord = newValue!;
-                                                });
-                                              })
-                                        ],
-                                      ),
-                                      actions: [
-                                        Center(
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.of(dialogContext)
-                                                    .pop();
-                                                if (totalTraining != null &&
-                                                    typeRecord != null &&
-                                                    hasSubscription) {
-                                                  BlocProvider.of<
-                                                              ScheduleDataBloc>(
-                                                          context)
-                                                      .add(CreateRecordEvent(
-                                                          scheduleId: state
-                                                              .schedules[index]
-                                                              .id,
-                                                          userId: userId,
-                                                          totalTraining:
-                                                              totalTraining,
-                                                          hallId: state
-                                                              .schedules[index]
-                                                              .hallId,
-                                                          typeRecord:
-                                                              typeRecord,
-                                                          visitionDate:
-                                                              formattedDate));
-                                                } else {
-                                                  showDialog(
-                                                    context: dialogContext,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: const Text(
-                                                            "Предупреждение"),
-                                                        content: const Text(
-                                                            "Абонемент не приобретён! Записаться невозможно, приобретите абонемент в профиле пользователя."),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                            child: const Text(
-                                                                "Закрыть"),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }
-                                              },
-                                              child: const Text('Ок')),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            }
-                          },
-                          child: const Text("Записаться"))),
-                );
+                return _buildScheduleItem(context, state.schedules[index]);
               },
             );
           } else if (state is ScheduleErrorState) {
             return Center(child: Text('Error: ${state.error}'));
           } else {
-            return const Center(
-              child: Text('Нет данных о записях'),
-            );
+            return const Center(child: Text('Нет данных о записях'));
           }
         },
       ),
@@ -254,6 +140,106 @@ class _SheduleInfoPageState extends State<SheduleInfoPage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  void _showSubscriptionWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Предупреждение"),
+          content: const Text(
+              "Абонемент не приобретён! Записаться невозможно, приобретите абонемент в профиле пользователя."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Закрыть"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRecordDialog(
+      BuildContext context, int scheduleId, int hallId, int userId) async {
+    BuildContext dialogContext = context;
+    final DateTime? pickedDate = await _pickDate(context);
+    if (pickedDate != null) {
+      String formattedDate = DateFormat('MM.dd.yyyy').format(pickedDate);
+      List<String> typesList = ['Тренировка в зале', 'Глемпинг'];
+
+      bool hasSubscription = false;
+      int totalTraining = 0;
+      String typeRecord = typesList.first;
+
+      if (dialogContext.mounted) {
+        await showDialog(
+          context: dialogContext,
+          builder: (BuildContext dialogContext) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                title: const Center(
+                  child: Text("Дополнительная информация"),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomTextField(onChanged: (value) {
+                      totalTraining = int.parse(value);
+                    }),
+                    const SizedBox(height: 8.0),
+                    CustomDropdownButton(
+                        value: typeRecord,
+                        items: typesList,
+                        onChanged: (newValue) {
+                          setState(() {
+                            typeRecord = newValue!;
+                          });
+                        })
+                  ],
+                ),
+                actions: [
+                  Center(
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          if (totalTraining != null &&
+                              typeRecord != null &&
+                              hasSubscription) {
+                          } else {
+                            _showSubscriptionWarning(context);
+                          }
+                        },
+                        child: const Text("Ок")),
+                  )
+                ],
+              );
+            });
+          },
+        );
+      }
+    }
+  }
+
+  Widget _buildScheduleItem(BuildContext context, Schedule schedule) {
+    return Card(
+      margin: const EdgeInsets.all(8.0),
+      child: ListTile(
+        title: Text(schedule.workoutName),
+        subtitle: Text(schedule.typeName),
+        trailing: ElevatedButton(
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            final userId = prefs.getInt('user_id');
+            _showRecordDialog(context, schedule.id, schedule.hallId, userId!);
+          },
+          child: const Text("Записаться"),
+        ),
       ),
     );
   }
