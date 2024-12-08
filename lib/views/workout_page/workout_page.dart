@@ -6,7 +6,8 @@ import '../../helpers/colors.dart';
 
 class WorkoutPage extends StatelessWidget {
   final Workout data;
-  const WorkoutPage({super.key, required this.data});
+
+  const WorkoutPage({Key? key, required this.data}) : super(key: key);
 
   Future<DateTime?> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(

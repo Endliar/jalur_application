@@ -17,13 +17,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'adapters/schedule_adapter.dart';
+import 'adapters/workout_detail_adapter.dart';
 import 'bloc/home_page/homepage_event.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final SharedPreferences preferences = await SharedPreferences.getInstance();
   final String? authToken = preferences.getString('auth_token');
-  preferences.remove('phone');
   await initHave();
   await initializeDateFormatting('ru_RU', null);
   runApp(
@@ -45,6 +45,8 @@ Future<void> initHave() async {
   await Hive.openBox<WorkoutAdapter>('workouts');
   Hive.registerAdapter(ScheduleAdapterAdapter());
   await Hive.openBox<ScheduleAdapter>('schedules');
+  Hive.registerAdapter(WorkoutDetailAdapterAdapter());
+  await Hive.openBox<WorkoutDetailAdapter>('workout_details');
 }
 
 class MyApp extends StatelessWidget {
