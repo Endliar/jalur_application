@@ -16,6 +16,7 @@ import 'package:jalur/views/welcome_page/welcome_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'adapters/schedule_adapter.dart';
 import 'bloc/home_page/homepage_event.dart';
 
 void main() async {
@@ -42,6 +43,8 @@ Future<void> initHave() async {
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(WorkoutAdapterAdapter());
   await Hive.openBox<WorkoutAdapter>('workouts');
+  Hive.registerAdapter(ScheduleAdapterAdapter());
+  await Hive.openBox<ScheduleAdapter>('schedules');
 }
 
 class MyApp extends StatelessWidget {
