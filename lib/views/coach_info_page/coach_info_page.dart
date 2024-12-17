@@ -131,8 +131,25 @@ class _CoachInfoPageState extends State<CoachInfoPage> {
                                       CoachDataState>(
                                     builder: (context, state) {
                                       if (state is LoadingCoachDataState) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
+                                        return Scaffold(
+                                          appBar: AppBar(
+                                            backgroundColor: kSecondaryColor,
+                                            title: const Text(
+                                              "Тренер",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            centerTitle: true,
+                                          ),
+                                          backgroundColor:
+                                              Colors.white, // Цвет фона
+                                          body: const Center(
+                                            child: CircularProgressIndicator(
+                                              color:
+                                                  kPrimaryColor, // Цвет индикатора
+                                              strokeWidth: 4.0, // Толщина линии
+                                            ),
+                                          ),
                                         );
                                       } else if (state
                                           is LoadCoachDataSuccess) {

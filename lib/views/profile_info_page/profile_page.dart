@@ -108,8 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 265.0,
               height: 35.0,
               decoration: BoxDecoration(
-                color:
-                    kPrimaryColor, // пример цвета фона для кнопки, замени на нужный
+                color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: TextButton(
@@ -123,14 +122,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          const SizedBox(height: 16), // добавим небольшой отступ между кнопками
+          const SizedBox(height: 16),
           Center(
             child: Container(
               width: 265.0,
               height: 35.0,
               decoration: BoxDecoration(
-                color:
-                    kPrimaryColor, // пример цвета фона для кнопки, замени на нужный
+                color: kPrimaryColor,
                 borderRadius: BorderRadius.circular(6),
               ),
               child: TextButton(

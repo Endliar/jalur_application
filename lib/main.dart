@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jalur/adapters/coach_adapter.dart';
 import 'package:jalur/adapters/workout_adapter.dart';
 import 'package:jalur/bloc/home_page/homepage_bloc.dart';
 import 'package:jalur/bloc/home_page/homepage_state.dart';
@@ -47,6 +48,8 @@ Future<void> initHave() async {
   await Hive.openBox<ScheduleAdapter>('schedules');
   Hive.registerAdapter(WorkoutDetailAdapterAdapter());
   await Hive.openBox<WorkoutDetailAdapter>('workout_details');
+  Hive.registerAdapter(CoachAdapterAdapter());
+  await Hive.openBox<CoachAdapter>('coaches');
 }
 
 class MyApp extends StatelessWidget {

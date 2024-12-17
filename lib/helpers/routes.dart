@@ -10,6 +10,7 @@ import 'package:jalur/bloc/login_page/login_bloc.dart';
 import 'package:jalur/bloc/registration_page/registration_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_bloc.dart';
 import 'package:jalur/bloc/schedule_data_page/schedule_data_event.dart';
+import 'package:jalur/helpers/colors.dart';
 import 'package:jalur/response_api/auth_user.dart';
 import 'package:jalur/response_api/create_record.dart';
 import 'package:jalur/response_api/create_user.dart';
@@ -139,8 +140,22 @@ class Routes {
             child: BlocBuilder<DetailWorkoutBloc, DetailWorkoutState>(
               builder: (context, state) {
                 if (state is LoadingDetailState) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: kSecondaryColor,
+                      title: const Text(
+                        "Тренировка",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      centerTitle: true,
+                    ),
+                    backgroundColor: Colors.white, // Цвет фона
+                    body: const Center(
+                      child: CircularProgressIndicator(
+                        color: kPrimaryColor, // Цвет индикатора
+                        strokeWidth: 4.0, // Толщина линии
+                      ),
+                    ),
                   );
                 } else if (state is LoadWorkoutSuccess) {
                   final workout = state.workouts;
