@@ -70,6 +70,10 @@ class _HomepageState extends State<Homepage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is HomepageLoadWorkoutSuccess) {
+            if (state.workouts == null) {
+              return const Center(
+                  child: Text("На текущий момент нет доступных тренировок"));
+            }
             if (state.workouts.isNotEmpty) {
               return ListView.builder(
                 itemCount: state.workouts.length,

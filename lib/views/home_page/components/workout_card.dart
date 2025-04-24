@@ -23,7 +23,7 @@ class WorkoutCard extends StatelessWidget {
                 topRight: Radius.circular(10.0),
               ),
               child: Image.network(
-                'http://176.113.83.11/storage/${workout.images}',
+                'http://193.104.57.92/storage/${workout.images}',
                 width: double.infinity,
                 height: 150.0,
                 fit: BoxFit.cover,
