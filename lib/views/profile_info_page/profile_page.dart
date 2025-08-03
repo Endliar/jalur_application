@@ -13,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../helpers/colors.dart';
 import '../../helpers/routes.dart';
 
+import 'package:yookassa_payments_flutter/yookassa_payments_flutter.dart';
+
 class ProfilePage extends StatefulWidget {
   final int selectedIndex;
   const ProfilePage({super.key, required this.selectedIndex});
@@ -24,6 +26,16 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   int _selectedIndex = 0;
   DateTime pickedDate = DateTime.now();
+
+  Future<void> _initiateYooKassaPayment() async {
+    final String shopId = 'test_shop_id';
+    final String secretKey = 'test_secret_key'; // Ваш секретный ключ (тестовый)
+    final String amount = '100.00'; // Сумма оплаты (например, 100 рублей)
+    final String currency = 'RUB'; // Валюта
+    final String description = 'Оплата абонемента'; // Описание платежа
+
+    YookassaPaymentsFlutter.confirmation(url, paymentMethod, clientApplicationKey, shopId)
+  }
 
   @override
   void initState() {
@@ -195,6 +207,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Center(
+            child: Container(
+              width: 265.0,
+              height: 35.0,
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: TextButton(
+                onPressed: _,
+                child: ,),
             ),
           ),
         ],
